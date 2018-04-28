@@ -1,0 +1,7 @@
+You must place a file called
+
+"redditApi.json" In this Folder
+
+It must have two fields:
+
+"client_secret" and "client_id" which are your reddit application's Client Secret and id respectively
