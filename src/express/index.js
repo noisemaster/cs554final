@@ -100,7 +100,7 @@ app.get('/reddit/url', async (req, res) => {
         '&state=' + uuid.v4() +
         '&redirect_uri=' + BASE_URI + PORT + REDIRECT_PATH +
         '&duration=permanent' + 
-        '&scope=identity'
+        '&scope=identity read history mysubreddits'
     });
 });
 
