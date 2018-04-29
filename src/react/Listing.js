@@ -13,11 +13,20 @@ class Listing extends Component {
             }
         }
 
+        const ifExternalUrl = () => {
+            if (this.props.data.url) {
+                return (
+                    <div><a href={this.props.data.url}>{this.props.data.url}</a></div>
+                )
+            }
+        }
+
         return (
         <div>
             <div>{this.props.data.subreddit_name_prefixed} Posted By u/{this.props.data.author}</div>
             <div><h2>{this.props.data.title}</h2></div>
             {ifThumbnail()}
+            {ifExternalUrl()}
         </div>
         );
     }
