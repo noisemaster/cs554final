@@ -6,3 +6,7 @@ import registerServiceWorker from './react/registerServiceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
+
+async function main() {
+    
+}
