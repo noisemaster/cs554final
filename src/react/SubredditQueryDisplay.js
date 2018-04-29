@@ -37,7 +37,7 @@ class SubredditQueryList extends Component {
                 <div> Results for: {this.props.data} </div>
                 <div>
 					{this.state.queryArray.map( (result) => {
-						return <SubredditQueryEntry data={result} key={result.name}/>
+						return <SubredditQueryEntry data={result} key={result.name} switchMainPage={this.props.switchMainPage}/>
 					})}
 				</div>
             </div>

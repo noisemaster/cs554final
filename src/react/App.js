@@ -54,12 +54,12 @@ class App extends Component {
   getMainContent = () => {
 	  if (this.state.type === 'Listing') {
 		  return (
-			  <ListingList data={this.state.content_data}/>
+			  <ListingList data={this.state.content_data} switchMainPage={this.switchMainPage}/>
 		  )
 	  }
 	  if (this.state.type === 'SubredditQueryDisplay') {
 		  return (
-			  <SubredditQueryDisplay data={this.state.content_data}/>
+			  <SubredditQueryDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
 		  );
 	  }
   }
