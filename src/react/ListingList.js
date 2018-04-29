@@ -15,8 +15,8 @@ class ListingList extends Component {
 	}
 
 	componentDidMount = async (props) => {
-		console.log("Hi" + this.props.url);
-		if (typeof (this.props.url) !== 'string') {
+		console.log("Hi" + this.props.data);
+		if (typeof (this.props.data) !== 'string') {
 			return;
 		}
 		await this.changeListingList();
@@ -31,7 +31,7 @@ class ListingList extends Component {
 	changeListingList = async () => {
 		console.log("Trying to Change Listing");
 		console.log("Trying to change to: " + this.state.type);
-		const response = await redditApi.genericGetRequest(this.props.url + this.state.type + '/.json');
+		const response = await redditApi.genericGetRequest(this.props.data + this.state.type + '/.json');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -45,7 +45,7 @@ class ListingList extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest(this.props.url + this.state.type + '/.json?after=' + this.state.after);
+		const response = await redditApi.genericGetRequest(this.props.data + this.state.type + '/.json?after=' + this.state.after);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;

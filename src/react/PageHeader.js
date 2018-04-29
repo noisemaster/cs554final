@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import localRequests from './utility/localApi';
-import ListingList from './ListingList';
+import SubredditSearchBar from './SubredditSearchBar';
 
 
 class PageHeader extends Component {
@@ -48,8 +48,9 @@ class PageHeader extends Component {
 		return (
 		<header>
 			<div> Put an App Name Here </div>
+			<div onClick={() => {this.props.switchMainPage('', 'Listing')}}> Home </div>
 			{this.displayLogin()}
-			<ListingList url=''/>
+			<SubredditSearchBar switchMainPage={this.props.switchMainPage}/>
 		</header>
 		)
 	}

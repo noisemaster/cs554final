@@ -36,13 +36,27 @@ redditRequests.genericGetRequest = async (url) => {
     return response.data;
 }
 
+redditRequests.genericPostRequest = async (url, body) => {
+    if (!url || typeof (url) !== 'string' || url.length === 0) {
+        throw 'Invalid URL to Make Get Request';
+    }
+
+    let response;
+    if (redditRequests.access_token) {
+        response = await redditOAuthInstance.post(url, body, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
+    } else {
+        response = await redditNoAuthInstance.post(url, body, null);
+    }
+
+    if (!response.data) {
+        throw 'No Data Received!';
+    }
+
+    return response.data;    
+}
+
 redditRequests.setAccessToken = (access_token) => {
     redditRequests.access_token = access_token;
 }
-
-redditRequests.getHomePage = () => {
-    return redditRequests.genericGetRequest('.json');
-}
-
 
 export default redditRequests;

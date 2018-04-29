@@ -4,6 +4,8 @@ import './App.css';
 import localApi from './utility/localApi';
 import redditApi from './utility/redditApi';
 import PageHeader from './PageHeader';
+import ListingList from './ListingList';
+import SubredditQueryDisplay from './SubredditQueryDisplay';
 
 class App extends Component {
 
@@ -12,7 +14,9 @@ class App extends Component {
 		this.state = {
 			authenticated: false,
 			username: undefined,
-			token: undefined
+			token: undefined,
+			content_data: '',
+			type: 'Listing'
 		}
   }
 
@@ -31,18 +35,41 @@ class App extends Component {
 				token: response.access_token,
 			});
 			redditApi.setAccessToken(this.state.token);
-			console.log(await redditApi.getHomePage())
+			this.switchMainPage('', 'Listing');
 		} catch (e) {
 			console.error(e);
 		}
 	}
   }
 
+  switchMainPage = (content_data, type) => {
+	  console.log('I should be doing stuff yes?');
+	  console.log(content_data);
+		this.setState ({
+			content_data,
+			type
+		});
+  }
+
+  getMainContent = () => {
+	  if (this.state.type === 'Listing') {
+		  return (
+			  <ListingList data={this.state.content_data}/>
+		  )
+	  }
+	  if (this.state.type === 'SubredditQueryDisplay') {
+		  return (
+			  <SubredditQueryDisplay data={this.state.content_data}/>
+		  );
+	  }
+  }
+
   render() {
 	return (
 	<div className="App">
-		<PageHeader username={this.state.username} authenticated={this.state.authenticated}/>
+		<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
 		<div className="App-intro">
+			{this.getMainContent()}
 		</div>
 	</div>
 	);
