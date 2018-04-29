@@ -22,7 +22,15 @@ class ListingList extends Component {
 		await this.changeListingList();
 	}
 
+	componentDidUpdate = async (props) => {
+		if (this.state.listingArray.length === 0) {
+			await this.changeListingList();
+		}
+	}
+
 	changeListingList = async () => {
+		console.log("Trying to Change Listing");
+		console.log("Trying to change to: " + this.state.type);
 		const response = await redditApi.genericGetRequest(this.props.url + this.state.type + '/.json');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
@@ -54,10 +62,10 @@ class ListingList extends Component {
 		console.log(newType);
 		this.setState (
 			{
-				type: newType
+				type: newType,
+				listingArray: []
 			}
 		)
-		this.changeListingList();
 	};
 
 	render() {
