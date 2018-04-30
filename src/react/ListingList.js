@@ -32,6 +32,7 @@ class ListingList extends Component {
 		console.log("Trying to Change Listing");
 		console.log("Trying to change to: " + this.state.type);
 		const response = await redditApi.genericGetRequest(this.props.data + this.state.type + '/.json');
+		console.log(response);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -80,7 +81,7 @@ class ListingList extends Component {
 				</div>
 				<div>
 					{this.state.listingArray.map( (listing) => {
-						return <Listing data={listing.data} key={listing.data.id}/>
+						return <Listing data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
 					})}
 				</div>
 				<div onClick={this.getNextListingList}> Get More Results </div>

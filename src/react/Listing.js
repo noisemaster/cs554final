@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Listing extends Component {
     render() {
-
+        console.log(this.props);
         const ifThumbnail = () => {
             if (this.props.data.thumbnail && this.props.data.thumbnail_height && this.props.data.thumbnail_width
                 && this.props.data.thumbnail !== 'self' && this.props.data.thumbnail !== 'default'
@@ -22,7 +22,7 @@ class Listing extends Component {
         }
 
         return (
-        <div>
+        <div onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>
             <div>{this.props.data.subreddit_name_prefixed} Posted By u/{this.props.data.author}</div>
             <div><h2>{this.props.data.title}</h2></div>
             {ifThumbnail()}
