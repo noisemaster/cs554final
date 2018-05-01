@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 
 class RedditPost extends Component {
     render() {
+        console.log(this.props.data);
         if (!this.props.data) {
             return <div/>
         }
 
-        console.log(this.props);
+        const ifExternalLink = () => {
+            if (this.props.data.url) {
+                return (
+                    <div><a href={this.props.data.url}>{this.props.data.url}</a></div>
+                );
+            }
+        }
+
         const ifSelfText = () => {
             if (this.props.data.selftext) {
                 return (
@@ -28,7 +36,10 @@ class RedditPost extends Component {
         }
         return (
         <div>
+            <h2>{this.props.data.title}</h2>
+            <div>{this.props.data.subreddit_name_prefixed}</div>
             <div>u/{this.props.data.author}</div>
+            {ifExternalLink()}
             {ifSelfText()}
             {ifImages()}
         </div>

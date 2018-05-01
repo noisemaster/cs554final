@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
 import Listing from './Listing';
+import RedditPost from './RedditPost';
+import RedditMessage from './RedditMessage';
 
+class RedditProfileDisplay extends Component {
 
-class ListingList extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			type: 'hot',
 			listingArray: [],
-			index: 0,
 			after: undefined
 		}
 	}
@@ -22,9 +22,8 @@ class ListingList extends Component {
 		await this.changeListingList();
 	}
 
-	componentDidUpdate = async (previousProps) => {
-		console.log("I went here instead?");
-		if (previousProps !== this.props || this.state.listingArray.length === 0) {
+	componentDidUpdate = async (props) => {
+		if (this.state.listingArray.length === 0) {
 			await this.changeListingList();
 		}
 	}
@@ -32,8 +31,7 @@ class ListingList extends Component {
 	changeListingList = async () => {
 		console.log("Trying to Change Listing");
 		console.log("Trying to change to: " + this.state.type);
-		console.log(this.props.data);
-		const response = await redditApi.genericGetRequest(this.props.data + '/' + this.state.type + '/.json');
+		const response = await redditApi.genericGetRequest('user/' + this.props.data + '/.json?raw_json=1');
 		console.log(response);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
@@ -48,7 +46,7 @@ class ListingList extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest(this.props.data + '/' + this.state.type + '/.json?after=' + this.state.after);
+		const response = await redditApi.genericGetRequest(this.props.data + '/.json?after=' + this.state.after + '&raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -72,19 +70,22 @@ class ListingList extends Component {
 	};
 
 	render() {
+
+        const getProperFormat = () => {
+            return (this.state.listingArray.map((listing) => {
+                if (listing.kind === 't3' || listing.data.name.match('/^t3_/')) {
+                    return <RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
+                }
+                if (listing.kind === 't1') {
+                    return <RedditMessage data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>
+				}
+				console.log(listing  || listing.data.name.match('/^t1_/'));
+            }));
+        }
 		return (
 			<div>
 				<div>
-					<div onClick={() => this.setType('hot')}> Hot </div>
-					<div onClick={() => this.setType('new')}> New </div>
-					<div onClick={() => this.setType('controversial')}> Controversial </div>
-					<div onClick={() => this.setType('top')}> Top </div>
-					<div onClick={() => this.setType('rising')}> Rising </div>
-				</div>
-				<div>
-					{this.state.listingArray.map( (listing) => {
-						return <Listing data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
-					})}
+					{getProperFormat()}
 				</div>
 				<div onClick={this.getNextListingList}> Get More Results </div>
 			</div>
@@ -92,4 +93,4 @@ class ListingList extends Component {
 	}
 }
 
-export default ListingList;
+export default RedditProfileDisplay;

@@ -22,9 +22,12 @@ class Listing extends Component {
         }
 
         return (
-        <div onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>
-            <div>{this.props.data.subreddit_name_prefixed} Posted By u/{this.props.data.author}</div>
-            <div><h2>{this.props.data.title}</h2></div>
+        <div>
+            <div><h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2></div>
+            <div>
+                <p onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</p>
+                <p onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>Posted By u/{this.props.data.author}</p>
+            </div>
             {ifThumbnail()}
             {ifExternalUrl()}
         </div>

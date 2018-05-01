@@ -7,6 +7,7 @@ import PageHeader from './PageHeader';
 import ListingList from './ListingList';
 import SubredditQueryDisplay from './SubredditQueryDisplay';
 import RedditPostDisplay from './RedditPostDisplay';
+import RedditProfileDisplay from './RedditProfileDisplay';
 
 class App extends Component {
 
@@ -66,6 +67,11 @@ class App extends Component {
 		if (this.state.type === 'RedditPostDisplay') {
 			return (
 				<RedditPostDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
+			);
+		}
+		if (this.state.type === 'RedditProfileDisplay') {
+			return (
+				<RedditProfileDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
 			);
 		}
 	}
