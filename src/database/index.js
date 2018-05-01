@@ -123,12 +123,12 @@ const Database = function () {
         }
 
         const createTable = 'CREATE TABLE IF NOT EXISTS %I (' +
-            ' id SERIAL PRIMARY KEY,' +
+            ' id TEXT PRIMARY KEY,' +
             ' username TEXT NOT NULL UNIQUE,' +
             ' email TEXT NOT NULL,' +
-            ' access_token TEXT' +
-            ' refresh_token TEXT' +
-            ' color-choice TEXT' +
+            ' access_token TEXT,' +
+            ' refresh_token TEXT,' +
+            ' color_choice TEXT' +
             ' );';
 
         const client = await dbPool.connect();
