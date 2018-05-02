@@ -10,11 +10,8 @@ class SubredditSearchBar extends Component {
 	}
 
 	onSubmit = e => {
-		console.log("Do I do?");
 		e.preventDefault();
-		console.log(this.state.subredditQuery);
 		if (this.state.subredditQuery) {
-			console.log("I am a do this");
 			this.props.switchMainPage(this.state.subredditQuery, 'SubredditQueryDisplay');
 		}
 		this.setState({

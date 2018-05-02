@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class Listing extends Component {
     render() {
-        console.log(this.props);
         const ifThumbnail = () => {
             if (this.props.data.thumbnail && this.props.data.thumbnail_height && this.props.data.thumbnail_width
                 && this.props.data.thumbnail !== 'self' && this.props.data.thumbnail !== 'default'

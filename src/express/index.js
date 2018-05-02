@@ -15,7 +15,7 @@ const database = require('./database');
 const BASE_URI = 'http://localhost:';
 const PORT = '3001';
 const REACT_PORT = '3000';
-const REDIRECT_PATH = '';
+const REDIRECT_PATH = '/reddit/api/authorization';
 
 let client_id;
 let client_secret;

@@ -29,10 +29,7 @@ class RedditProfileDisplay extends Component {
 	}
 
 	changeListingList = async () => {
-		console.log("Trying to Change Listing");
-		console.log("Trying to change to: " + this.state.type);
 		const response = await redditApi.genericGetRequest('user/' + this.props.data + '/.json?raw_json=1');
-		console.log(response);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -60,7 +57,6 @@ class RedditProfileDisplay extends Component {
 	}
 
 	setType = (newType) => {
-		console.log(newType);
 		this.setState (
 			{
 				type: newType,
@@ -76,10 +72,9 @@ class RedditProfileDisplay extends Component {
                 if (listing.kind === 't3' || listing.data.name.match('/^t3_/')) {
                     return <RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
                 }
-                if (listing.kind === 't1') {
+                if (listing.kind === 't1' || listing.data.name.match('/^t1_/')) {
                     return <RedditMessage data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>
 				}
-				console.log(listing  || listing.data.name.match('/^t1_/'));
             }));
         }
 		return (

@@ -45,8 +45,6 @@ class App extends Component {
 	}
 
 	switchMainPage = (content_data, type) => {
-		console.log('I should be doing stuff yes?');
-		console.log(content_data);
 			this.setState ({
 				content_data,
 				type

@@ -11,12 +11,10 @@ class SubredditQueryList extends Component {
     }
 
     resetQuery = async (props) => {
-        console.log('Am I doing this again');
         if (!this.props.data) {
             return;
         }
         const response = await redditApi.genericPostRequest('api/search_subreddits?query=' + this.props.data, null);
-        console.log(response.subreddits);
         if (response.subreddits) {
             this.setState({
                 queryArray: response.subreddits

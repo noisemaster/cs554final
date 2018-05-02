@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class RedditPost extends Component {
     render() {
-        console.log(this.props.data);
         if (!this.props.data) {
             return <div/>
         }
