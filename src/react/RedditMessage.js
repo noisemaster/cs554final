@@ -51,7 +51,7 @@ class RedditMessage extends Component {
 					return (
 						<div>
 							{ this.props.data.replies.data.children.map( (replies) => {
-								return <RedditMessage data={replies.data} key={replies.data.id} showReplies={true} kind={replies.kind} link_id={this.props.link_id}/>
+								return <RedditMessage data={replies.data} key={replies.data.id} switchMainPage={this.props.switchMainPage} showReplies={true} kind={replies.kind} link_id={this.props.link_id}/>
 							})}
 							<div onClick={() => {this.setShowReplies(false);}}> Collapse Replies </div>
 						</div> 
@@ -75,7 +75,7 @@ class RedditMessage extends Component {
 				return (
 					<React.Fragment>
 						{ this.state.moreComments.map( (replies) => {
-							return <RedditMessage data={replies.data} key={replies.data.id} showReplies={true} kind={replies.kind} link_id={this.props.link_id}/>
+							return <RedditMessage data={replies.data} key={replies.data.id} switchMainPage={this.props.switchMainPage} showReplies={true} kind={replies.kind} link_id={this.props.link_id}/>
 						})}           
 					</React.Fragment>
 				);
@@ -96,7 +96,7 @@ class RedditMessage extends Component {
 			return (
 				<div>
 					<h2>{this.props.data.title}</h2>
-					<div>u/{this.props.data.author}</div>
+					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
 					<div>{this.props.data.body}</div>
 					<div>Replies: {getRepliesCount()}</div>
 					{replies()}

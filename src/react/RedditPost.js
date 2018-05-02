@@ -36,8 +36,8 @@ class RedditPost extends Component {
         return (
         <div>
             <h2>{this.props.data.title}</h2>
-            <div>{this.props.data.subreddit_name_prefixed}</div>
-            <div>u/{this.props.data.author}</div>
+            <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
+            <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
             {ifExternalLink()}
             {ifSelfText()}
             {ifImages()}

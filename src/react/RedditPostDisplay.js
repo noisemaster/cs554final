@@ -33,10 +33,10 @@ class RedditPostDisplay extends Component {
         console.log(this.state.mainPost);
         return (
             <div>
-                <RedditPost data={this.state.mainPost}/>
+                <RedditPost data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
                 <div/>
                 {this.state.commentList.map( (comment) => {
-					return <RedditMessage data={comment.data} key={comment.data.id} kind={comment.kind} link_id={this.state.mainPost.name}/>
+					return <RedditMessage data={comment.data} key={comment.data.id} switchMainPage={this.props.switchMainPage} kind={comment.kind} link_id={this.state.mainPost.name}/>
 				})}       
             </div>
         )

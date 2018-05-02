@@ -43,7 +43,7 @@ class RedditProfileDisplay extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest(this.props.data + '/.json?after=' + this.state.after + '&raw_json=1');
+		const response = await redditApi.genericGetRequest('user/' + this.props.data + '/.json?after=' + this.state.after + '&raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
