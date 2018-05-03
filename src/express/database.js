@@ -9,6 +9,13 @@ databaseModule.insertUserIntoDatabase = async user => {
     }
 } 
 
+databaseModule.updateUserInDatabase = async user => {
+    if (!database[user.name]) {
+        return;
+    }
+    database[user.name] = user;
+    database[user.id] = user;
+}
 databaseModule.getUserByName = async name => {
     if (!database[name]) {
         return null;

@@ -15,6 +15,10 @@ localRequests.configure = async () => {
     return request.data;
 }
 
+localRequests.refresh = async () => {
+    const request = await localInstance.get('refreshToken');
+}
+
 localRequests.getUrl = async() => {
     const request = await localInstance.get('reddit/url');
     return request.data;

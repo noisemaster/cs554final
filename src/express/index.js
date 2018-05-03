@@ -23,120 +23,174 @@ let client_secret;
 
 /* ==========================================================================================*/
 async function main() {
-    const data = fs.readFileSync(path.join(__dirname, '../../data/redditApi.json'));
+	const data = fs.readFileSync(path.join(__dirname, '../../data/redditApi.json'));
 
-    if (!data) {
-        console.error('No Reddit API Keys Found');
-        exit(1);
-    }
+	if (!data) {
+		console.error('No Reddit API Keys Found');
+		exit(1);
+	}
 
-    const jsonData = JSON.parse(data);
-    if (!jsonData.client_id || !jsonData.client_secret) {
-        console.error('Invalid Reddit API Keys Found');
-        exit(1);
-    }
+	const jsonData = JSON.parse(data);
+	if (!jsonData.client_id || !jsonData.client_secret) {
+		console.error('Invalid Reddit API Keys Found');
+		exit(1);
+	}
 
-    client_id = jsonData.client_id;
-    client_secret = jsonData.client_secret;
-    /* ==========================================================================================*/
-    const createDatabase = async function () {
-        let databaseConfig;
-        // Try to load Database Configuration File that has the Username, Password, and Database Name
-        try {
-            databaseConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database-config.json'), 'utf-8'));
-        } catch (error) {
-            console.log('Invalid Database Configuration File: ' + error);
-            throw ('Cannot Load Database');
-        }
+	client_id = jsonData.client_id;
+	client_secret = jsonData.client_secret;
+	/* ==========================================================================================*/
+	const createDatabase = async function () {
+		let databaseConfig;
+		// Try to load Database Configuration File that has the Username, Password, and Database Name
+		try {
+			databaseConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../../database-config.json'), 'utf-8'));
+		} catch (error) {
+			console.log('Invalid Database Configuration File: ' + error);
+			throw ('Cannot Load Database');
+		}
 
-        // Ensure that the Database Config File is of the proper format.
-        if (!databaseConfig.database || typeof (databaseConfig.database) !== 'string') {
-            throw 'Invalid Database Configuration';
-        }
+		// Ensure that the Database Config File is of the proper format.
+		if (!databaseConfig.database || typeof (databaseConfig.database) !== 'string') {
+			throw 'Invalid Database Configuration';
+		}
 
-        await db.createDatabase(databaseConfig.database);
-    }
-    await createDatabase();
-    await users.config();
-    /* ==========================================================================================*/
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }));
-    app.use(cookieParser());
+		await db.createDatabase(databaseConfig.database);
+	}
+	await createDatabase();
+	await users.config();
+	/* ==========================================================================================*/
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({
+		extended: true
+	}));
+	app.use(cookieParser());
 
-    app.get(REDIRECT_PATH, async (req, res) => {
-        try {
-            if (!req.query.code) {
-                console.log("I failed I need to handle this 1.");
-            }
-            const response = await requests.getAccessToken(client_id, client_secret, req.query.code, BASE_URI + PORT + REDIRECT_PATH);
-            if (!response.access_token || !response.token_type ||
-                !response.expires_in || !response.refresh_token ||
-                !response.scope) {
-                console.log("I failed I need to handle this 2.");
-            }
-            const me = await requests.getMe(response.access_token);
-            if (!me || !me.name) {
-                console.log("I failed I need to handle this 3");
-            }
-            let userObject;
-            if (!(userObject = await database.getUserByName(me.name))) {
-                userObject = {};
-                userObject.name = me.name;
-                userObject.access_token = response.access_token;
-                userObject.refresh_token = response.refresh_token;
-                userObject.scope = response.scope;
-                userObject.id = uuid.v4();
-                await database.insertUserIntoDatabase(userObject);
-            }
-            console.log(userObject);
-            res.cookie('cs554RedditReader', userObject.id, {
-                maxAge: 2147483647
-            });
-            res.redirect(BASE_URI + REACT_PORT);
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({
-                error: 'Failed to Authorize Account'
-            });
-        }
-    });
+	app.get(REDIRECT_PATH, async (req, res) => {
+		try {
+			if (!req.query.code) {
+				console.log("I failed I need to handle this 1.");
+			}
+			const response = await requests.getAccessToken(client_id, client_secret, req.query.code, BASE_URI + PORT + REDIRECT_PATH);
+			if (!response.access_token || !response.token_type ||
+				!response.expires_in || !response.refresh_token ||
+				!response.scope) {
+				console.log("I failed I need to handle this 2.");
+			}
+			const me = await requests.getMe(response.access_token);
+			if (!me || !me.name) {
+				console.log("I failed I need to handle this 3");
+			}
+			let userObject;
+			if (!(userObject = await database.getUserByName(me.name))) {
+				userObject = {};
+				userObject.name = me.name;
+				userObject.access_token = response.access_token;
+				userObject.refresh_token = response.refresh_token;
+				userObject.scope = response.scope;
+				userObject.id = uuid.v4();
+				await database.insertUserIntoDatabase(userObject);
+			}
+			console.log(userObject);
+			res.cookie('cs554RedditReader', userObject.id, {
+				maxAge: 2147483647
+			});
+			res.redirect(BASE_URI + REACT_PORT);
+		} catch (e) {
+			console.log(e);
+			res.status(500).json({
+				error: 'Failed to Authorize Account'
+			});
+		}
+	});
 
-    app.get('/configure', async (req, res) => {
-        console.log(req.cookies);
-        if (!req.cookies || !req.cookies.cs554RedditReader) {
-            res.json({});
-            return;
-        }
-        const user = await database.getUserByUUID(req.cookies.cs554RedditReader);
-        console.log(user);
-        if (!user) {
-            res.json({});
-            return;
-        }
-        res.json(user);
-    });
+	app.get('/configure', async (req, res) => {
+		console.log(req.cookies);
+		if (!req.cookies || !req.cookies.cs554RedditReader) {
+			res.json({});
+			return;
+		}
+		const user = await database.getUserByUUID(req.cookies.cs554RedditReader);
+		console.log(user);
+		if (!user) {
+			res.json({});
+			return;
+		}
+		res.json(user);
+	});
 
-    app.get('/reddit/url', async (req, res) => {
-        res.json({
-            url: 'https://www.reddit.com/api/v1/authorize?' +
-                'client_id=' + client_id +
-                '&response_type=code' +
-                '&state=' + uuid.v4() +
-                '&redirect_uri=' + BASE_URI + PORT + REDIRECT_PATH +
-                '&duration=permanent' +
-                '&scope=identity read history mysubreddits'
-        });
-    });
+	app.get('/refreshToken', async (req, res) => {
+		if (!req.cookies || !req.cookies.cs554RedditReader) {
+			res.status(401).json({error: 'No Cookie Set'});
+			return;
+		}
+		const user = await database.getUserByUUID(req.cookies.cs554RedditReader);
+		
+		if (!user) {
+			res.status(401).json({error: 'Not Authorized'});
+			return;
+		}
 
-    app.use('*', (req, res) => {
-        res.sendStatus(404);
-    });
+		try {
+			if (!user.refresh_token) {
+				console.log("Shit Broke");
+				res.cookie('cs554RedditReader', null);
+				res.redirect(req.get('referer'));
+				return;
+			}
+			const response = await requests.refreshAccessToken(client_id, client_secret, user.refresh_token, BASE_URI + PORT + REDIRECT_PATH);
+			if (!response.access_token || !response.token_type ||
+				!response.expires_in ||
+				!response.scope) {
+				console.log("Shit Broke 2");
+				res.cookie('cs554RedditReader', null);
+				res.redirect(req.get('referer'));
+				return;
+			}
+			const me = await requests.getMe(response.access_token);
+			if (!me || !me.name) {
+				console.log("Shit Broke 3");
+				res.cookie('cs554RedditReader', null);
+                res.redirect(req.get('referer'));
+                return;
+			}
+			user.name = me.name;
+			user.access_token = response.access_token;
+			user.scope = response.scope;
+			await database.updateUserInDatabase(user);
+			console.log(user);
+			res.cookie('cs554RedditReader', user.id, {
+				maxAge: 2147483647
+			});
+			res.redirect(req.get('referer'));
+		} catch (e) {
+			console.log(e);
+			res.status(500).json({
+				error: 'Failed to Refresh Account'
+			});
+		}
 
-    app.listen(3001, () => {
-        console.log('Express Server Running at http://localhost:3001');
-    });
+
+	});
+
+	app.get('/reddit/url', async (req, res) => {
+		res.json({
+			url: 'https://www.reddit.com/api/v1/authorize?' +
+				'client_id=' + client_id +
+				'&response_type=code' +
+				'&state=' + uuid.v4() +
+				'&redirect_uri=' + BASE_URI + PORT + REDIRECT_PATH +
+				'&duration=permanent' +
+				'&scope=identity read history mysubreddits'
+		});
+	});
+
+	app.use('*', (req, res) => {
+		res.sendStatus(404);
+	});
+
+	app.listen(3001, () => {
+		console.log('Express Server Running at http://localhost:3001');
+	});
 }
 main();
 /* ==========================================================================================*/

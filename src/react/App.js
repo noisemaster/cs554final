@@ -23,7 +23,7 @@ class App extends Component {
 	}
 
 	componentDidMount = async (props) => {
-		if (!this.state.authenticated) {
+		if (!this.state.token) {
 			try {
 				let response = await localApi.configure();
 				if (!response || !response.name || !response.access_token) {
@@ -40,6 +40,29 @@ class App extends Component {
 				this.switchMainPage('', 'Listing');
 			} catch (e) {
 				console.error(e);
+			}
+		}
+	}
+
+	componentDidUpdate = async (prevProps, prevState) => {
+		if (prevState !== this.state) {
+			if (!this.state.token) {
+				try {
+					let response = await localApi.configure();
+					if (!response || !response.name || !response.access_token) {
+						response = {};
+						response.name = undefined;
+						response.token = undefined;
+					}
+					this.setState({
+						authenticated: true,
+						username: response.name,
+						token: response.access_token,
+					});
+					redditApi.setAccessToken(this.state.token);
+				} catch (e) {
+					console.error(e);
+				}
 			}
 		}
 	}
@@ -77,6 +100,8 @@ class App extends Component {
 	render() {
 		return (
 		<div className="App">
+			<div onClick={() => {localApi.refresh()}}> Click on me to Refresh </div>
+			<div onClick={() => {this.setState({token: undefined, authenticated: false}); console.log("Ditched Token: " + this.state.token)}}> Ditch Current Access Token </div>
 			<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
 			<div className="App-intro">
 				{this.getMainContent()}

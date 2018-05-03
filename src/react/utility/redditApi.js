@@ -1,4 +1,5 @@
 import Axios from "axios";
+import localApi from './localApi';
 
 const redditOAuthInstance = Axios.create();
 const redditNoAuthInstance = Axios.create();
@@ -18,41 +19,56 @@ const redditRequests = {};
 redditRequests.access_token = undefined;
 
 redditRequests.genericGetRequest = async (url) => {
-    if (!url || typeof (url) !== 'string' || url.length === 0) {
-        throw 'Invalid URL to Make Get Request';
+    try {
+        if (!url || typeof (url) !== 'string' || url.length === 0) {
+            throw 'Invalid URL to Make Get Request';
+        }
+    
+        let response;
+        if (redditRequests.access_token) {
+            response = await redditOAuthInstance.get(url, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
+        } else {
+            response = await redditNoAuthInstance.get(url, null);
+        }
+    
+        if (!response.data) {
+            throw 'No Data Received!';
+        }
+    
+        return response.data;
+    } catch (e) {
+        if (e.response && e.response.status && e.response.status === 401) {
+            await localApi.refresh();
+        }
+        throw e
     }
 
-    let response;
-    if (redditRequests.access_token) {
-        response = await redditOAuthInstance.get(url, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
-    } else {
-        response = await redditNoAuthInstance.get(url, null);
-    }
-
-    if (!response.data) {
-        throw 'No Data Received!';
-    }
-
-    return response.data;
 }
 
 redditRequests.genericPostRequest = async (url, body) => {
-    if (!url || typeof (url) !== 'string' || url.length === 0) {
-        throw 'Invalid URL to Make Get Request';
-    }
-
-    let response;
-    if (redditRequests.access_token) {
-        response = await redditOAuthInstance.post(url, body, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
-    } else {
-        response = await redditNoAuthInstance.post(url, body, null);
-    }
-
-    if (!response.data) {
-        throw 'No Data Received!';
-    }
-
-    return response.data;    
+    try {
+        if (!url || typeof (url) !== 'string' || url.length === 0) {
+            throw 'Invalid URL to Make Get Request';
+        }
+    
+        let response;
+        if (redditRequests.access_token) {
+            response = await redditOAuthInstance.post(url, body, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
+        } else {
+            response = await redditNoAuthInstance.post(url, body, null);
+        }
+    
+        if (!response.data) {
+            throw 'No Data Received!';
+        }
+    
+        return response.data; 
+    } catch (e) {
+        if (e.response && e.response.status && e.response.status === 401) {
+            await localApi.refresh();
+        }
+        throw e
+    }   
 }
 
 redditRequests.setAccessToken = (access_token) => {
