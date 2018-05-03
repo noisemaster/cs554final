@@ -27,13 +27,13 @@ async function main() {
 
 	if (!data) {
 		console.error('No Reddit API Keys Found');
-		exit(1);
+		process.exit(1);
 	}
 
 	const jsonData = JSON.parse(data);
 	if (!jsonData.client_id || !jsonData.client_secret) {
 		console.error('Invalid Reddit API Keys Found');
-		exit(1);
+		process.exit(1);
 	}
 
 	client_id = jsonData.client_id;
