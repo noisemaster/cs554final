@@ -21,7 +21,7 @@ redditRequests.access_token = undefined;
 redditRequests.genericGetRequest = async (url) => {
     try {
         if (!url || typeof (url) !== 'string' || url.length === 0) {
-            throw 'Invalid URL to Make Get Request';
+            throw new Error('Invalid URL to Make Get Request');
         }
     
         let response;
@@ -32,7 +32,7 @@ redditRequests.genericGetRequest = async (url) => {
         }
     
         if (!response.data) {
-            throw 'No Data Received!';
+            throw new Error('No Data Received!');
         }
     
         return response.data;
@@ -40,7 +40,7 @@ redditRequests.genericGetRequest = async (url) => {
         if (e.response && e.response.status && e.response.status === 401) {
             await localApi.refresh();
         }
-        throw e
+        throw e;
     }
 
 }
@@ -48,7 +48,7 @@ redditRequests.genericGetRequest = async (url) => {
 redditRequests.genericPostRequest = async (url, body) => {
     try {
         if (!url || typeof (url) !== 'string' || url.length === 0) {
-            throw 'Invalid URL to Make Get Request';
+            throw new Error('Invalid URL to Make Get Request');
         }
     
         let response;
@@ -59,7 +59,7 @@ redditRequests.genericPostRequest = async (url, body) => {
         }
     
         if (!response.data) {
-            throw 'No Data Received!';
+            throw new Error('No Data Received!');
         }
     
         return response.data; 
@@ -67,7 +67,7 @@ redditRequests.genericPostRequest = async (url, body) => {
         if (e.response && e.response.status && e.response.status === 401) {
             await localApi.refresh();
         }
-        throw e
+        throw e;
     }   
 }
 

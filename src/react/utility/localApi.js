@@ -16,7 +16,7 @@ localRequests.configure = async () => {
 }
 
 localRequests.refresh = async () => {
-    const request = await localInstance.get('/refreshToken');
+    await localInstance.get('/refreshToken');
 }
 
 localRequests.getUrl = async() => {

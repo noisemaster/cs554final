@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class RedditPost extends Component {
     render() {
+        console.log(this.props);
         if (!this.props.data) {
             return <div/>
         }
@@ -23,11 +24,16 @@ class RedditPost extends Component {
         }
 
         const ifImages = () => {
+            if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
+                return (
+                    <div><img src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/></div>
+                );
+            } 
             if (this.props.data.preview && this.props.data.preview.images && this.props.data.preview.images.length > 0) {
                 return (
                     <div>
                         {this.props.data.preview.images.map( (image) => {
-						    return <img src={image.resolutions[image.resolutions.length - 1].url}/>
+						    return <img src={image.resolutions[image.resolutions.length - 1].url} alt={this.props.data.title} key={image.id}/>
 					    })}
                     </div>
                 );

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import redditApi from './utility/redditApi';
-import Listing from './Listing';
 import RedditMessage from './RedditMessage';
 import RedditPost from './RedditPost';
 

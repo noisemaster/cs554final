@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
-import Listing from './Listing';
 import RedditPost from './RedditPost';
 import RedditMessage from './RedditMessage';
 
@@ -64,17 +63,21 @@ class RedditProfileDisplay extends Component {
 		)
 	};
 
+	decipherItemType = (listing) => {
+		if (listing.kind === 't3' || listing.data.name.match('/^t3_/')) {
+			return (<RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>);
+		}
+		if (listing.kind === 't1' || listing.data.name.match('/^t1_/')) {
+			return (<RedditMessage data={listing.data} profileMessage={true} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>);
+		}
+		return;
+	}
 	render() {
 
         const getProperFormat = () => {
-            return (this.state.listingArray.map((listing) => {
-                if (listing.kind === 't3' || listing.data.name.match('/^t3_/')) {
-                    return <RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
-                }
-                if (listing.kind === 't1' || listing.data.name.match('/^t1_/')) {
-                    return <RedditMessage data={listing.data} profileMessage={true} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>
-				}
-            }));
+            return this.state.listingArray.map((listing) => {
+				return this.decipherItemType(listing);
+            });
         }
 		return (
 			<div>

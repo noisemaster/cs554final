@@ -29,7 +29,7 @@ class ListingList extends Component {
 		if (this.props.match && this.props.match.params && this.props.match.params['0']) {
 			path = this.props.match.params['0'];
 		}
-		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json');
+		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json?raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -47,7 +47,7 @@ class ListingList extends Component {
 		if (this.props.match && this.props.match.params && this.props.match.params['0']) {
 			path = this.props.match.params['0'];
 		}
-		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json?after=' + this.state.after);
+		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json?raw_json=1&after=' + this.state.after);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;

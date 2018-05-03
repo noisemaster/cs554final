@@ -5,7 +5,7 @@ class SubredditQueryEntry extends Component {
     ifIconImg() {
         if (this.props.data.icon_img) {
             return (
-                <div><img src={this.props.data.icon_img}/></div>
+                <div><img src={this.props.data.icon_img} alt={this.props.data.name}/></div>
             )
         }
     }
