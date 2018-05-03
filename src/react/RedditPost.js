@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Linkify from 'linkifyjs/react';
 
 class RedditPost extends Component {
     render() {
@@ -17,7 +18,7 @@ class RedditPost extends Component {
         const ifSelfText = () => {
             if (this.props.data.selftext) {
                 return (
-                    <div>{this.props.data.selftext}</div>
+                    <div><Linkify>{this.props.data.selftext}</Linkify></div>
                 );
             }
         }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
+import Linkify from 'linkifyjs/react';
 
 class RedditMessage extends Component {
 
@@ -86,6 +87,7 @@ class RedditMessage extends Component {
 		}
 		
 		const returnMessage = () => {
+			console.log(this.props);
 			if (this.props.kind === 'more') {
 				return (
 					<React.Fragment>
@@ -101,14 +103,14 @@ class RedditMessage extends Component {
 							<span onClick={() => {this.props.switchMainPage(this.props.data.permalink.split('/').slice(0,-2).join('/'), 'RedditPostDisplay')}}> {this.props.data.link_title}</span> in 
 							<span onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}> {this.props.data.subreddit_name_prefixed}</span>
 						</div>
-						<div>{this.props.data.body}</div>
+						<div><Linkify>{this.props.data.body}</Linkify></div>
 					</div>
 				);
 			}
 			return (
 				<div>
 					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
-					<div>{this.props.data.body}</div>
+					<div><Linkify>{this.props.data.body}</Linkify></div>
 					<div>Replies: {getRepliesCount()}</div>
 					{replies()}
 				</div>
