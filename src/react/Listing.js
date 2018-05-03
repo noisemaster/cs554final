@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import helper from '../helper';
 
 class Listing extends Component {
     render() {
@@ -31,6 +32,7 @@ class Listing extends Component {
             <div>
                 <p onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</p>
                 <p onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>Posted By u/{this.props.data.author}</p>
+                 Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago
             </div>
             {ifThumbnail()}
             {ifExternalUrl()}

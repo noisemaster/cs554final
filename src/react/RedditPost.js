@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Linkify from 'linkifyjs/react';
+import helper from '../helper';
 
 class RedditPost extends Component {
     render() {
@@ -44,6 +45,7 @@ class RedditPost extends Component {
             <h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2>
             <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
             <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
+            <div> Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago </div>
             {ifExternalLink()}
             {ifSelfText()}
             {ifImages()}

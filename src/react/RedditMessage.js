@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
 import Linkify from 'linkifyjs/react';
+import helper from '../helper';
 
 class RedditMessage extends Component {
 
@@ -87,7 +88,6 @@ class RedditMessage extends Component {
 		}
 		
 		const returnMessage = () => {
-			console.log(this.props);
 			if (this.props.kind === 'more') {
 				return (
 					<React.Fragment>
@@ -110,6 +110,7 @@ class RedditMessage extends Component {
 			return (
 				<div>
 					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
+					<div> Replied {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</div>
 					<div><Linkify>{this.props.data.body}</Linkify></div>
 					<div>Replies: {getRepliesCount()}</div>
 					{replies()}
