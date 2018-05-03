@@ -93,9 +93,16 @@ class RedditMessage extends Component {
 					</React.Fragment>
 				);
 			}
+			if (this.props.profileMessage) {
+				return (
+					<div>
+						<div> <span>u/{this.props.data.author}</span> commented on <span>{this.props.data.link_title}</span> in <span>{this.props.data.subreddit_name_prefixed}</span></div>
+						<div>{this.props.data.body}</div>
+					</div>
+				);
+			}
 			return (
 				<div>
-					<h2>{this.props.data.title}</h2>
 					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
 					<div>{this.props.data.body}</div>
 					<div>Replies: {getRepliesCount()}</div>

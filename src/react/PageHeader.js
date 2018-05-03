@@ -48,7 +48,7 @@ class PageHeader extends Component {
 		return (
 		<header>
 			<div> Put an App Name Here </div>
-			<div onClick={() => {this.props.switchMainPage('', 'Listing')}}> Home </div>
+			<div onClick={() => {this.props.switchMainPage('', 'Home')}}> Home </div>
 			{this.displayLogin()}
 			<SubredditSearchBar switchMainPage={this.props.switchMainPage}/>
 		</header>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import './App.css';
 
 import localApi from './utility/localApi';
@@ -11,14 +12,15 @@ import RedditProfileDisplay from './RedditProfileDisplay';
 
 class App extends Component {
 
-	constructor (props) {
-			super (props);
+	constructor (props, context) {
+			super (props, context);
 			this.state = {
 				authenticated: false,
 				username: undefined,
 				token: undefined,
 				content_data: '',
-				type: 'Listing'
+				type: 'Listing',
+				redirect: false
 			}
 	}
 
@@ -37,7 +39,7 @@ class App extends Component {
 					token: response.access_token,
 				});
 				redditApi.setAccessToken(this.state.token);
-				this.switchMainPage('', 'Listing');
+				this.switchMainPage('', 'Home');
 			} catch (e) {
 				console.error(e);
 			}
@@ -68,33 +70,11 @@ class App extends Component {
 	}
 
 	switchMainPage = (content_data, type) => {
-			this.setState ({
-				content_data,
-				type
-			});
-	}
-
-	getMainContent = () => {
-		if (this.state.type === 'Listing') {
-			return (
-				<ListingList data={this.state.content_data} switchMainPage={this.switchMainPage}/>
-			)
-		}
-		if (this.state.type === 'SubredditQueryDisplay') {
-			return (
-				<SubredditQueryDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
-			);
-		}
-		if (this.state.type === 'RedditPostDisplay') {
-			return (
-				<RedditPostDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
-			);
-		}
-		if (this.state.type === 'RedditProfileDisplay') {
-			return (
-				<RedditProfileDisplay data={this.state.content_data} switchMainPage={this.switchMainPage}/>
-			);
-		}
+		this.props.history.push('/' + type + '/' + content_data);
+		this.setState({
+			content_data,
+			type,
+		});
 	}
 
 	render() {
@@ -104,11 +84,27 @@ class App extends Component {
 			<div onClick={() => {this.setState({token: undefined, authenticated: false}); console.log("Ditched Token: " + this.state.token)}}> Ditch Current Access Token </div>
 			<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
 			<div className="App-intro">
-				{this.getMainContent()}
+				<Switch>
+					<Route path='/Listing/*' render={(props) => {
+						return(<ListingList {...props} switchMainPage={this.switchMainPage}/>)
+					}}/>
+					<Route path='/Home' render={(props) => {
+						return(<ListingList {...props} data={''} switchMainPage={this.switchMainPage}/>)
+					}}/>
+					<Route path='/SubredditQueryDisplay/*' render={(props) => {
+						return(<SubredditQueryDisplay {...props} switchMainPage={this.switchMainPage}/>)
+					}}/>
+					<Route path='/RedditPostDisplay/*' render={(props) => {
+						return(<RedditPostDisplay {...props} switchMainPage={this.switchMainPage}/>)
+					}}/>
+					<Route path='/RedditProfileDisplay/*' render={(props) => {
+						return(<RedditProfileDisplay {...props} switchMainPage={this.switchMainPage}/>)
+					}}/>
+				</Switch>
 			</div>
 		</div>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);

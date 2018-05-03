@@ -11,10 +11,10 @@ class SubredditQueryList extends Component {
     }
 
     resetQuery = async (props) => {
-        if (!this.props.data) {
+        if (!this.props.match.params['0']) {
             return;
         }
-        const response = await redditApi.genericPostRequest('api/search_subreddits?query=' + this.props.data, null);
+        const response = await redditApi.genericPostRequest('api/search_subreddits?query=' + this.props.match.params['0'], null);
         if (response.subreddits) {
             this.setState({
                 queryArray: response.subreddits
@@ -23,6 +23,7 @@ class SubredditQueryList extends Component {
     }
 
     componentDidMount = this.resetQuery;
+
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.resetQuery();

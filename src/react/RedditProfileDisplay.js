@@ -15,8 +15,7 @@ class RedditProfileDisplay extends Component {
 	}
 
 	componentDidMount = async (props) => {
-		console.log("Hi" + this.props.data);
-		if (typeof (this.props.data) !== 'string') {
+		if (typeof (this.props.match.params['0']) !== 'string') {
 			return;
 		}
 		await this.changeListingList();
@@ -29,7 +28,7 @@ class RedditProfileDisplay extends Component {
 	}
 
 	changeListingList = async () => {
-		const response = await redditApi.genericGetRequest('user/' + this.props.data + '/.json?raw_json=1');
+		const response = await redditApi.genericGetRequest('user/' + this.props.match.params['0'] + '/.json?raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -43,7 +42,7 @@ class RedditProfileDisplay extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest('user/' + this.props.data + '/.json?after=' + this.state.after + '&raw_json=1');
+		const response = await redditApi.genericGetRequest('user/' + this.props.match.params['0'] + '/.json?after=' + this.state.after + '&raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -73,7 +72,7 @@ class RedditProfileDisplay extends Component {
                     return <RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
                 }
                 if (listing.kind === 't1' || listing.data.name.match('/^t1_/')) {
-                    return <RedditMessage data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>
+                    return <RedditMessage data={listing.data} profileMessage={true} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>
 				}
             }));
         }

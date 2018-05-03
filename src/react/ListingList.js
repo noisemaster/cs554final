@@ -15,9 +15,6 @@ class ListingList extends Component {
 	}
 
 	componentDidMount = async (props) => {
-		if (typeof (this.props.data) !== 'string') {
-			return;
-		}
 		await this.changeListingList();
 	}
 
@@ -28,7 +25,11 @@ class ListingList extends Component {
 	}
 
 	changeListingList = async () => {
-		const response = await redditApi.genericGetRequest(this.props.data + '/' + this.state.type + '/.json');
+		let path = ''
+		if (this.props.match && this.props.match.params && this.props.match.params['0']) {
+			path = this.props.match.params['0'];
+		}
+		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -42,7 +43,11 @@ class ListingList extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest(this.props.data + '/' + this.state.type + '/.json?after=' + this.state.after);
+		let path = ''
+		if (this.props.match && this.props.match.params && this.props.match.params['0']) {
+			path = this.props.match.params['0'];
+		}
+		const response = await redditApi.genericGetRequest(path + '/' + this.state.type + '/.json?after=' + this.state.after);
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;

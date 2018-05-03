@@ -14,7 +14,7 @@ class RedditPostDisplay extends Component {
     }
 
     componentDidMount = async (props) => {
-        const response = await redditApi.genericGetRequest(this.props.data + '.json/?raw_json=1');
+        const response = await redditApi.genericGetRequest(this.props.match.params['0'] + '.json/?raw_json=1');
         if (!response || !response[0] || !response[0].data || !response[0].data.children || !response[0].data.children[0]) {
             console.error('No Main Post Found!');
             return;
@@ -30,7 +30,6 @@ class RedditPostDisplay extends Component {
     }
 
     render() {
-        console.log(this.state.mainPost);
         return (
             <div>
                 <RedditPost data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
