@@ -34,6 +34,5 @@ requests.refreshAccessToken = async (client_id, client_secret, refresh_token, re
 
 requests.getMe = async (access_token) => {
     const me = await Axios.get('https://oauth.reddit.com/api/v1/me', {headers: {Authorization: 'Bearer ' + access_token}});
-    //console.log(me.data);
     return me.data;
 };

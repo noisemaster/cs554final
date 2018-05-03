@@ -80,8 +80,6 @@ class App extends Component {
 	render() {
 		return (
 		<div className="App">
-			<div onClick={() => {localApi.refresh()}}> Click on me to Refresh </div>
-			<div onClick={() => {this.setState({token: undefined, authenticated: false}); console.log("Ditched Token: " + this.state.token)}}> Ditch Current Access Token </div>
 			<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
 			<div className="App-intro">
 				<Switch>

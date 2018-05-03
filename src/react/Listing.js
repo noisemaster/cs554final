@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class Listing extends Component {
     render() {
-        console.log(this.props);
         const ifThumbnail = () => {
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
