@@ -43,6 +43,14 @@ class RedditMessage extends Component {
 			return repliesCount;
 		}
 
+		const showIfReplies = () => {
+			let replyCount = getRepliesCount();
+			if (replyCount) {
+				return (<div>Replies: {getRepliesCount()}</div>);
+			}
+			return;
+		}
+
 		const replies = () => {
 			if (this.props.data.replies) {
 				if (!this.state.showReplies) {
@@ -112,7 +120,7 @@ class RedditMessage extends Component {
 					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
 					<div> Replied {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</div>
 					<div><Linkify>{this.props.data.body}</Linkify></div>
-					<div>Replies: {getRepliesCount()}</div>
+					{showIfReplies()}
 					{replies()}
 				</div>
 			);
