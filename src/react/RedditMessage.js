@@ -73,7 +73,7 @@ class RedditMessage extends Component {
 		}
 
 		const showMore = async () => {
-			const response = await redditApi.genericGetRequest('api/morechildren/?api_type=json&children=' + this.props.data.children.join(',') + '&link_id=' + this.props.link_id)
+			const response = await redditApi.genericGetRequest('api/morechildren/?api_type=json&children=' + this.props.data.children.join(',') + '&raw_json=1&link_id=' + this.props.link_id)
 			if (!response || !response.json || !response.json.data || !response.json.data.things) {
 				return;
 			}
@@ -113,7 +113,7 @@ class RedditMessage extends Component {
 							<span onClick={() => {this.props.switchMainPage(this.props.data.permalink.split('/').slice(0,-2).join('/'), 'RedditPostDisplay')}}> {this.props.data.link_title}</span> in 
 							<span onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}> {this.props.data.subreddit_name_prefixed}</span>
 						</div>
-						<div><Linkify>{this.props.data.body}</Linkify></div>
+						<div><Linkify><Interweave tagname='fragment' transform={LinkTransform} content={this.props.data.body_html}/></Linkify></div>
 					</div>
 				);
 			}
