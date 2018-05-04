@@ -13,15 +13,15 @@ import RedditProfileDisplay from './RedditProfileDisplay';
 class App extends Component {
 
 	constructor (props, context) {
-			super (props, context);
-			this.state = {
-				authenticated: false,
-				username: undefined,
-				token: undefined,
-				content_data: '',
-				type: 'Listing',
-				redirect: false
-			}
+		super (props, context);
+		this.state = {
+			authenticated: false,
+			username: undefined,
+			token: undefined,
+			content_data: '',
+			type: 'Listing',
+			redirect: false
+		}
 	}
 
 	componentDidMount = async (props) => {
@@ -81,7 +81,6 @@ class App extends Component {
 		return (
 		<div className="App">
 			<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
-			<div className="App-intro">
 				<Switch>
 					<Route path='/Listing/*' render={(props) => {
 						return(<ListingList {...props} switchMainPage={this.switchMainPage}/>)
@@ -99,7 +98,6 @@ class App extends Component {
 						return(<RedditProfileDisplay {...props} switchMainPage={this.switchMainPage}/>)
 					}}/>
 				</Switch>
-			</div>
 		</div>
 		);
 	}

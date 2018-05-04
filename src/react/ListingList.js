@@ -69,22 +69,31 @@ class ListingList extends Component {
 		)
 	};
 
+	isTypeActive = type => {
+		if (this.state.type === type) {
+			return 'nav-item nav-link active';
+		}
+		return 'nav-item nav-link';
+	}
+
 	render() {
 		return (
 			<div>
-				<div>
-					<div onClick={() => this.setType('hot')}> Hot </div>
-					<div onClick={() => this.setType('new')}> New </div>
-					<div onClick={() => this.setType('controversial')}> Controversial </div>
-					<div onClick={() => this.setType('top')}> Top </div>
-					<div onClick={() => this.setType('rising')}> Rising </div>
+				<div className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+					<div className="navbar-nav">
+						<a href="#" className={this.isTypeActive('hot')} onClick={() => this.setType('hot')}> Hot </a>
+						<a href="#" className={this.isTypeActive('new')} onClick={() => this.setType('new')}> New </a>
+						<a href="#" className={this.isTypeActive('controversial')} onClick={() => this.setType('controversial')}> Controversial </a>
+						<a href="#" className={this.isTypeActive('top')} onClick={() => this.setType('top')}> Top </a>
+						<a href="#" className={this.isTypeActive('rising')}  onClick={() => this.setType('rising')}> Rising </a>
+					</div>
 				</div>
-				<div>
+				<main className="container">
 					{this.state.listingArray.map( (listing) => {
 						return <Listing data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
 					})}
-				</div>
-				<div onClick={this.getNextListingList}> Get More Results </div>
+					<div onClick={this.getNextListingList}> Get More Results </div>
+				</main>
 			</div>
 		);
 	}

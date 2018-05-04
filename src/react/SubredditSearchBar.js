@@ -27,18 +27,16 @@ class SubredditSearchBar extends Component {
 
 	render() {
 		return (
-			<form id="subredditSearchForm" onSubmit={this.onSubmit}>
-				<div className="form-group">
-					<input
-						type="text"
-						value={this.state.subredditQuery}
-                        onChange={this.onSubredditQueryChange}
-                        maxLength="50"
-						className="form-control"
-						id="subredditSearch"
-						placeholder="Search for Subreddit..."
-					/>
-				</div>
+			<form className="form-inline my-2 my-lg-0" id="subredditSearchForm" onSubmit={this.onSubmit}>
+				<input
+					type="text"
+					value={this.state.subredditQuery}
+					onChange={this.onSubredditQueryChange}
+					maxLength="50"
+					className="form-control mr-sm-2"
+					id="subredditSearch"
+					placeholder="Search for Subreddit..."
+				/>
 			</form>
 		);
 	}

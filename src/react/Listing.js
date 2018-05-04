@@ -6,14 +6,14 @@ class Listing extends Component {
         const ifThumbnail = () => {
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
-                    <div><img src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/></div>
+                    <img className="mr-3 thumbnail" src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/>
                 );
             } 
             if (this.props.data.thumbnail && this.props.data.thumbnail_height && this.props.data.thumbnail_width
                 && this.props.data.thumbnail !== 'self' && this.props.data.thumbnail !== 'default'
                 && this.props.data.thumbnail !== 'image' && this.props.data.thumbnail !== 'nsfw' ) {
                 return (
-                    <div><img src={this.props.data.thumbnail} alt={this.props.data.title}/></div>
+                    <img className="mr-3 thumbnail" src={this.props.data.thumbnail} alt={this.props.data.title}/>
                 );
             }
         }
@@ -27,15 +27,15 @@ class Listing extends Component {
         }
 
         return (
-        <div>
-            <div><h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2></div>
-            <div>
+        <div className="media">
+            {ifThumbnail()}
+            <div className="media-body">
+                <h5 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h5>
+                {ifExternalUrl()}
                 <p onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</p>
                 <p onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>Posted By u/{this.props.data.author}</p>
-                 Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago
+                <p>Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
             </div>
-            {ifThumbnail()}
-            {ifExternalUrl()}
         </div>
         );
     }

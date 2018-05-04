@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import localRequests from './utility/localApi';
 import SubredditSearchBar from './SubredditSearchBar';
+import { Link } from "react-router-dom";
 
 
 class PageHeader extends Component {
@@ -31,12 +32,12 @@ class PageHeader extends Component {
 	displayLogin = () => {
 		if (this.props.authenticated && this.props.username) {
 			return (
-				<div> {this.props.username} </div>
+				<div className="navbar-text"> {this.props.username} </div>
 			)
 		}
 		if (this.state.url) {
 			return (
-				<div><a href={this.state.url}> Log In </a></div>
+				<div><a className="nav-link" href={this.state.url}> Log In </a></div>
 			)
 		}
 		return (
@@ -46,12 +47,18 @@ class PageHeader extends Component {
 
 	render() {
 		return (
-		<header>
-			<div><h1> ViewIt </h1></div>
-			<div onClick={() => {this.props.switchMainPage('', 'Home')}}> Home </div>
-			{this.displayLogin()}
+		<nav className="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+			<div className="navbar-brand mb-0 h1">ViewIt</div>
+			<ul className="navbar-nav mr-auto">
+				<li className="nav-item">
+					<Link className="nav-link" to="/Home"> Home </Link>
+				</li>
+				<li className="nav-item">
+					{this.displayLogin()}
+				</li>
+			</ul>
 			<SubredditSearchBar switchMainPage={this.props.switchMainPage}/>
-		</header>
+		</nav>
 		)
 	}
 }
