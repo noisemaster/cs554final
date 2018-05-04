@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Linkify from 'linkifyjs/react';
 import helper from '../helper';
+import { Markup } from 'interweave';
 
 class RedditPost extends Component {
     render() {
+        console.log(this.props);
         if (!this.props.data) {
             return <div/>
         }
@@ -19,7 +21,7 @@ class RedditPost extends Component {
         const ifSelfText = () => {
             if (this.props.data.selftext) {
                 return (
-                    <div><Linkify>{this.props.data.selftext}</Linkify></div>
+                    <Linkify><Markup content={this.props.data.selftext_html}/></Linkify>
                 );
             }
         }
