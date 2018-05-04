@@ -53,6 +53,9 @@ class PageHeader extends Component {
 				<li className="nav-item">
 					<Link className="nav-link" to="/Home"> Home </Link>
 				</li>
+				<li className='nav-item'>
+					<Link className='nav-link' to='/Register'> Register Email </Link>
+				</li>
 				<li className="nav-item">
 					{this.displayLogin()}
 				</li>

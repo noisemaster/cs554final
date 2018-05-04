@@ -4,7 +4,6 @@ const localInstance = Axios.create();
 
 localInstance.interceptors.request.use(config => {
     config.url = window.location.origin + config.url;
-    console.log(config.url);
     return config; 
 });
 
@@ -21,6 +20,11 @@ localRequests.refresh = async () => {
 
 localRequests.getUrl = async() => {
     const request = await localInstance.get('/reddit/url');
+    return request.data;
+}
+
+localRequests.setEmail = async (email) => {
+    const request = await localInstance.post('/register/email', {email});
     return request.data;
 }
 

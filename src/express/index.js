@@ -10,7 +10,7 @@ const app = express();
 const db = require('../database/index.js')();
 const users = require('../database/users.js');
 const requests = require('./requests');
-const database = require('./database');
+const database = require('../database')();
 
 const BASE_URI = 'http://localhost:';
 const PORT = '3001';
@@ -81,14 +81,22 @@ async function main() {
 				console.log("I failed I need to handle this 3");
 			}
 			let userObject;
-			if (!(userObject = await database.getUserByName(me.name))) {
+			let dbPool = await users.getDatabasePool();
+			const results = await database.getUserByUsername(dbPool, users.TABLE_NAME, me.name);
+
+			if (results && results.rows && results.rows[0]) {
+				userObject = results.rows[0];
+			}
+
+			if (!userObject) {
 				userObject = {};
-				userObject.name = me.name;
+				userObject.username = me.name;
 				userObject.access_token = response.access_token;
 				userObject.refresh_token = response.refresh_token;
 				userObject.scope = response.scope;
 				userObject.id = uuid.v4();
-				await database.insertUserIntoDatabase(userObject);
+				dbPool = await users.getDatabasePool();
+				await database.insertUser(dbPool, users.TABLE_NAME, userObject);
 			}
 			console.log(userObject);
 			res.cookie('cs554RedditReader', userObject.id, {
@@ -96,7 +104,7 @@ async function main() {
 			});
 			res.redirect(BASE_URI + REACT_PORT);
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			res.status(500).json({
 				error: 'Failed to Authorize Account'
 			});
@@ -104,18 +112,18 @@ async function main() {
 	});
 
 	app.get('/configure', async (req, res) => {
-		console.log(req.cookies);
 		if (!req.cookies || !req.cookies.cs554RedditReader) {
 			res.json({});
 			return;
 		}
-		const user = await database.getUserByUUID(req.cookies.cs554RedditReader);
-		console.log(user);
-		if (!user) {
+		const dbPool = await users.getDatabasePool();
+		const results = await database.getUserById(dbPool, users.TABLE_NAME, req.cookies.cs554RedditReader);
+		if (!results || !results.rows || !results.rows[0]) {
 			res.json({});
 			return;
 		}
-		res.json(user);
+		console.log(results.rows[0]);
+		res.json(results.rows[0]);
 	});
 
 	app.get('/refreshToken', async (req, res) => {
@@ -123,7 +131,14 @@ async function main() {
 			res.status(401).json({error: 'No Cookie Set'});
 			return;
 		}
-		const user = await database.getUserByUUID(req.cookies.cs554RedditReader);
+
+		let dbPool = await users.getDatabasePool();
+		const results = await database.getUserById(dbPool, users.TABLE_NAME, req.cookies.cs554RedditReader);
+		let user;
+
+		if (results && results.rows && results.rows[0]) {
+			user = results.rows[0];
+		}
 		
 		if (!user) {
 			res.status(401).json({error: 'Not Authorized'});
@@ -132,7 +147,6 @@ async function main() {
 
 		try {
 			if (!user.refresh_token) {
-				console.log("Shit Broke");
 				res.cookie('cs554RedditReader', null);
 				res.redirect(req.get('referer'));
 				return;
@@ -141,23 +155,21 @@ async function main() {
 			if (!response.access_token || !response.token_type ||
 				!response.expires_in ||
 				!response.scope) {
-				console.log("Shit Broke 2");
 				res.cookie('cs554RedditReader', null);
 				res.redirect(req.get('referer'));
 				return;
 			}
 			const me = await requests.getMe(response.access_token);
 			if (!me || !me.name) {
-				console.log("Shit Broke 3");
 				res.cookie('cs554RedditReader', null);
                 res.redirect(req.get('referer'));
                 return;
 			}
-			user.name = me.name;
+			user.username = me.name;
 			user.access_token = response.access_token;
 			user.scope = response.scope;
-			await database.updateUserInDatabase(user);
-			console.log(user);
+			dbPool = await users.getDatabasePool();
+			await database.updateUser(dbPool, users.TABLE_NAME, user);
 			res.cookie('cs554RedditReader', user.id, {
 				maxAge: 2147483647
 			});
@@ -182,6 +194,35 @@ async function main() {
 				'&duration=permanent' +
 				'&scope=identity read history mysubreddits'
 		});
+	});
+
+	app.post('/register/email', async (req, res) => {
+		if (!req.cookies || !req.cookies.cs554RedditReader) {
+			res.status(401).json({error: 'No Cookie Set'});
+			return;
+		}
+
+		if (!req.body.email) {
+			res.status(400).json({error: 'Invalid Email Entered'});
+			return;
+		}
+		try {
+			let dbPool = await users.getDatabasePool();
+			const results = await database.getUserById(dbPool, users.TABLE_NAME, req.cookies.cs554RedditReader);
+	
+			if (!results || !results.rows || !results.rows[0]) {
+				res.status(500).json({error: 'Failed to update Email'});
+				return
+			}
+	
+			dbPool = await users.getDatabasePool();
+			await database.updateUser(dbPool, users.TABLE_NAME, {id: req.cookies.cs554RedditReader, email: req.body.email});
+
+			res.sendStatus(200);
+		} catch (e) {
+			console.log(e);
+			res.status(500).json({error: 'Failed to update Email'});
+		}
 	});
 
 	app.use('*', (req, res) => {

@@ -9,6 +9,7 @@ import ListingList from './ListingList';
 import SubredditQueryDisplay from './SubredditQueryDisplay';
 import RedditPostDisplay from './RedditPostDisplay';
 import RedditProfileDisplay from './RedditProfileDisplay';
+import AddEmail from './AddEmail';
 
 class App extends Component {
 
@@ -17,6 +18,7 @@ class App extends Component {
 		this.state = {
 			authenticated: false,
 			username: undefined,
+			email: undefined,
 			token: undefined,
 			content_data: '',
 			type: 'Listing',
@@ -28,14 +30,16 @@ class App extends Component {
 		if (!this.state.token) {
 			try {
 				let response = await localApi.configure();
-				if (!response || !response.name || !response.access_token) {
+				if (!response || !response.username || !response.access_token) {
 					response = {};
 					response.name = undefined;
 					response.token = undefined;
+					response.email = undefined;
 				}
 				this.setState({
 					authenticated: true,
-					username: response.name,
+					username: response.username,
+					email: response.email,
 					token: response.access_token,
 				});
 				redditApi.setAccessToken(this.state.token);
@@ -51,14 +55,16 @@ class App extends Component {
 			if (!this.state.token) {
 				try {
 					let response = await localApi.configure();
-					if (!response || !response.name || !response.access_token) {
+					if (!response || !response.username || !response.access_token) {
 						response = {};
 						response.name = undefined;
+						response.email = undefined;
 						response.token = undefined;
 					}
 					this.setState({
 						authenticated: true,
-						username: response.name,
+						username: response.username,
+						email: response.email,
 						token: response.access_token,
 					});
 					redditApi.setAccessToken(this.state.token);
@@ -69,6 +75,12 @@ class App extends Component {
 		}
 	}
 
+	setEmail = (email) => {
+		this.setState({
+			email: email
+		});
+	}
+	
 	switchMainPage = (content_data, type) => {
 		this.props.history.push('/' + type + '/' + content_data);
 		this.setState({
@@ -87,6 +99,9 @@ class App extends Component {
 					}}/>
 					<Route path='/Home' render={(props) => {
 						return(<ListingList {...props} data={''} switchMainPage={this.switchMainPage}/>)
+					}}/>
+					<Route path='/Register' render={(props) => {
+						return (<AddEmail {...props} email={this.state.email} setEmail={this.setEmail}/>);
 					}}/>
 					<Route path='/SubredditQueryDisplay/*' render={(props) => {
 						return(<SubredditQueryDisplay {...props} switchMainPage={this.switchMainPage}/>)
