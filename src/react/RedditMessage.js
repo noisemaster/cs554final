@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
 import Linkify from 'linkifyjs/react';
 import helper from '../helper';
-import { Markup } from 'interweave';
+import Interweave from 'interweave';
+import LinkTransform from './InterweaveLinkTransform';
 
 class RedditMessage extends Component {
 
@@ -120,7 +121,7 @@ class RedditMessage extends Component {
 				<div>
 					<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
 					<div> Replied {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</div>
-					<Linkify><Markup tagName='fragment' content={this.props.data.body_html}/></Linkify>
+					<Linkify><Interweave tagName='fragment' transform={LinkTransform} content={this.props.data.body_html}/></Linkify>
 					{showIfReplies()}
 					{replies()}
 				</div>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Linkify from 'linkifyjs/react';
 import helper from '../helper';
-import { Markup } from 'interweave';
+import Interweave from 'interweave';
+import LinkTransform from './InterweaveLinkTransform';
 
 class RedditPost extends Component {
     render() {
@@ -21,7 +22,7 @@ class RedditPost extends Component {
         const ifSelfText = () => {
             if (this.props.data.selftext) {
                 return (
-                    <Linkify><Markup content={this.props.data.selftext_html}/></Linkify>
+                    <Linkify><Interweave tagName='fragment' transform={LinkTransform} content={this.props.data.selftext_html}/></Linkify>
                 );
             }
         }
