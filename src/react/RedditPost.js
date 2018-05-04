@@ -3,6 +3,7 @@ import Linkify from 'linkifyjs/react';
 import helper from '../helper';
 import Interweave from 'interweave';
 import LinkTransform from './InterweaveLinkTransform';
+import ReactPlayer from 'react-player';
 
 class RedditPost extends Component {
     render() {
@@ -27,7 +28,12 @@ class RedditPost extends Component {
             }
         }
 
-        const ifImages = () => {
+        const ifMedia = () => {
+            if (this.props.data.media && this.props.data.media.reddit_video && this.props.data.media.reddit_video.dash_url) {
+                return (
+                    <ReactPlayer url={this.props.data.media.reddit_video.fallback_url} playing controls='true'/>
+                );
+            }
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
                     <div><img src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/></div>
@@ -48,10 +54,11 @@ class RedditPost extends Component {
             <h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2>
             <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
             <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
+            <div> Score: {this.props.data.score} </div>
             <div> Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago </div>
             {ifExternalLink()}
             {ifSelfText()}
-            {ifImages()}
+            {ifMedia()}
         </div>
         );
     }
