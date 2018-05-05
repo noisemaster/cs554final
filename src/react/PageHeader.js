@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import localRequests from './utility/localApi';
 import SubredditSearchBar from './SubredditSearchBar';
 import { Link } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 
 class PageHeader extends Component {
@@ -29,15 +30,34 @@ class PageHeader extends Component {
 		}
 	}
 
+	logOut = () => {
+		console.log('I\'m undoing it all');
+		const cookies = new Cookies();
+		cookies.remove('cs554RedditReader', {path: '/'});
+		this.props.setToken('');
+	}
+
 	displayLogin = () => {
 		if (this.props.authenticated && this.props.username) {
 			return (
-				<div className="navbar-text"> {this.props.username} </div>
+				<React.Fragment>
+					<li className='nav-item'>
+						<Link className='nav-link' to='/Register'> Register Email </Link>
+					</li>
+					<li className="nav-item">
+						<div className="navbar-text"> {this.props.username} </div>
+					</li>
+					<li className='nav-item'>
+						<div className='nav-link' onClick={this.logOut}> Log Out </div>
+					</li>			
+				</React.Fragment>
 			)
 		}
 		if (this.state.url) {
 			return (
-				<div><a className="nav-link" href={this.state.url}> Log In </a></div>
+				<li className="nav-item">
+					<div><a className="nav-link" href={this.state.url}> Log In </a></div>
+				</li>
 			)
 		}
 		return (
@@ -53,12 +73,7 @@ class PageHeader extends Component {
 				<li className="nav-item">
 					<Link className="nav-link" to="/Home"> Home </Link>
 				</li>
-				<li className='nav-item'>
-					<Link className='nav-link' to='/Register'> Register Email </Link>
-				</li>
-				<li className="nav-item">
-					{this.displayLogin()}
-				</li>
+				{this.displayLogin()}
 			</ul>
 			<SubredditSearchBar switchMainPage={this.props.switchMainPage}/>
 		</nav>

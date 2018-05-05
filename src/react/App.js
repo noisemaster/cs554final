@@ -29,15 +29,17 @@ class App extends Component {
 	componentDidMount = async (props) => {
 		if (!this.state.token) {
 			try {
+				let authenticated = true;
 				let response = await localApi.configure();
 				if (!response || !response.username || !response.access_token) {
 					response = {};
 					response.name = undefined;
 					response.token = undefined;
 					response.email = undefined;
+					authenticated = false;
 				}
 				this.setState({
-					authenticated: true,
+					authenticated,
 					username: response.username,
 					email: response.email,
 					token: response.access_token,
@@ -51,18 +53,21 @@ class App extends Component {
 	}
 
 	componentDidUpdate = async (prevProps, prevState) => {
-		if (prevState !== this.state) {
+		if (JSON.stringify(prevState) !== JSON.stringify(this.state)) {
 			if (!this.state.token) {
 				try {
+					let authenticated = true;
 					let response = await localApi.configure();
 					if (!response || !response.username || !response.access_token) {
 						response = {};
 						response.name = undefined;
 						response.email = undefined;
 						response.token = undefined;
+						authenticated = false;
 					}
+					console.log(response);
 					this.setState({
-						authenticated: true,
+						authenticated,
 						username: response.username,
 						email: response.email,
 						token: response.access_token,
@@ -80,6 +85,12 @@ class App extends Component {
 			email: email
 		});
 	}
+
+	setToken = (token) => {
+		this.setState({
+			token
+		});
+	}
 	
 	switchMainPage = (content_data, type) => {
 		this.props.history.push('/' + type + '/' + content_data);
@@ -92,7 +103,7 @@ class App extends Component {
 	render() {
 		return (
 		<div className="App">
-			<PageHeader username={this.state.username} authenticated={this.state.authenticated} switchMainPage={this.switchMainPage}/>
+			<PageHeader username={this.state.username} authenticated={this.state.authenticated} setToken={this.setToken} switchMainPage={this.switchMainPage}/>
 				<Switch>
 					<Route path='/Listing/*' render={(props) => {
 						return(<ListingList {...props} switchMainPage={this.switchMainPage}/>)
