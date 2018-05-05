@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import localRequests from './utility/localApi';
 import localApi from './utility/localApi';
 
 class AddEmail extends Component {

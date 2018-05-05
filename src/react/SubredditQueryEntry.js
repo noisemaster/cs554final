@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import Linkify from 'linkifyjs/react';
+import Interweave from 'interweave';
+import LinkTransform from './InterweaveLinkTransform';
 
 class SubredditQueryEntry extends Component {
 
@@ -12,10 +15,11 @@ class SubredditQueryEntry extends Component {
 
     render() {
         return (
-            <div onClick={() => this.props.switchMainPage('r/' + this.props.data.name , 'Listing')}>
+            <div onClick={() => this.props.switchMainPage('r/' + this.props.data.title , 'Listing')}>
                 {this.ifIconImg()}
-                <div> {this.props.data.name} </div>
-                <div> Active Users: {this.props.data.active_user_count} Subscribers: {this.props.data.subscriber_count} </div>
+                <div> {this.props.data.url} </div>
+                <div> Subscribers: {this.props.data.subscribers} </div>
+                <Linkify><Interweave tagName='fragment' transform={LinkTransform} content={this.props.data.public_description_html}/></Linkify>
             </div>
         )
     }

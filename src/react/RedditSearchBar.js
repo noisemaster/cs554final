@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class SubredditSearchBar extends Component {
+class RedditSearchBar extends Component {
 	constructor(props) {
 		super(props);
 
@@ -12,7 +12,7 @@ class SubredditSearchBar extends Component {
 	onSubmit = e => {
 		e.preventDefault();
 		if (this.state.subredditQuery) {
-			this.props.switchMainPage(this.state.subredditQuery, 'SubredditQueryDisplay');
+			this.props.switchMainPage(this.state.subredditQuery, 'RedditQueryDisplay');
 		}
 		this.setState({
 			subredditQuery: ''
@@ -42,4 +42,4 @@ class SubredditSearchBar extends Component {
 	}
 }
 
-export default SubredditSearchBar;
+export default RedditSearchBar;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import localRequests from './utility/localApi';
-import SubredditSearchBar from './SubredditSearchBar';
+import RedditSearchBar from './RedditSearchBar';
 import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 
@@ -74,7 +74,7 @@ class PageHeader extends Component {
 				</li>
 				{this.displayLogin()}
 			</ul>
-			<SubredditSearchBar switchMainPage={this.props.switchMainPage}/>
+			<RedditSearchBar switchMainPage={this.props.switchMainPage}/>
 		</nav>
 		)
 	}

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import './App.css';
 
 import localApi from './utility/localApi';
 import redditApi from './utility/redditApi';
 import PageHeader from './PageHeader';
 import ListingList from './ListingList';
-import SubredditQueryDisplay from './SubredditQueryDisplay';
+import RedditQueryDisplay from './RedditQueryDisplay';
 import RedditPostDisplay from './RedditPostDisplay';
 import RedditProfileDisplay from './RedditProfileDisplay';
 import AddEmail from './AddEmail';
@@ -112,8 +112,8 @@ class App extends Component {
 					<Route path='/Register' render={(props) => {
 						return (<AddEmail {...props} email={this.state.email} setEmail={this.setEmail}/>);
 					}}/>
-					<Route path='/SubredditQueryDisplay/*' render={(props) => {
-						return(<SubredditQueryDisplay {...props} switchMainPage={this.switchMainPage}/>)
+					<Route path='/RedditQueryDisplay/*' render={(props) => {
+						return(<RedditQueryDisplay {...props} switchMainPage={this.switchMainPage}/>)
 					}}/>
 					<Route path='/RedditPostDisplay/*' render={(props) => {
 						return(<RedditPostDisplay {...props} switchMainPage={this.switchMainPage}/>)
