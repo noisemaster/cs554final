@@ -65,7 +65,6 @@ class App extends Component {
 						response.token = undefined;
 						authenticated = false;
 					}
-					console.log(response);
 					this.setState({
 						authenticated,
 						username: response.username,
@@ -100,10 +99,9 @@ class App extends Component {
 		});
 	}
 
-	render() {
-		return (
-		<div className="App">
-			<PageHeader username={this.state.username} authenticated={this.state.authenticated} setToken={this.setToken} switchMainPage={this.switchMainPage}/>
+	displayIfAuthenticated = () => {
+		if (this.state.authenticated) {
+			return (
 				<Switch>
 					<Route path='/Listing/*' render={(props) => {
 						return(<ListingList {...props} switchMainPage={this.switchMainPage}/>)
@@ -124,6 +122,16 @@ class App extends Component {
 						return(<RedditProfileDisplay {...props} switchMainPage={this.switchMainPage}/>)
 					}}/>
 				</Switch>
+			);
+		}
+		return (<div> Please Log In to Continue </div>);
+	}
+
+	render() {
+		return (
+		<div className="App">
+			<PageHeader username={this.state.username} authenticated={this.state.authenticated} setToken={this.setToken} switchMainPage={this.switchMainPage}/>
+			{this.displayIfAuthenticated()}
 		</div>
 		);
 	}

@@ -31,7 +31,6 @@ class PageHeader extends Component {
 	}
 
 	logOut = () => {
-		console.log('I\'m undoing it all');
 		const cookies = new Cookies();
 		cookies.remove('cs554RedditReader', {path: '/'});
 		this.props.setToken('');
