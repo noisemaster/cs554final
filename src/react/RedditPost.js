@@ -7,7 +7,6 @@ import ReactPlayer from 'react-player';
 
 class RedditPost extends Component {
     render() {
-        console.log(this.props);
         if (!this.props.data) {
             return <div/>
         }
@@ -31,14 +30,19 @@ class RedditPost extends Component {
         const ifMedia = () => {
             if (this.props.data.media && this.props.data.media.reddit_video && this.props.data.media.reddit_video.dash_url) {
                 return (
-                    <ReactPlayer url={this.props.data.media.reddit_video.fallback_url} playing controls='true'/>
+                    <ReactPlayer url={this.props.data.media.reddit_video.fallback_url} playing controls={true}/>
                 );
             }
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
                     <div><img src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/></div>
                 );
-            } 
+            }
+            if (this.props.data.preview && this.props.data.preview.reddit_video_preview && this.props.data.preview.reddit_video_preview.fallback_url) {
+                return (
+                    <ReactPlayer url={this.props.data.preview.reddit_video_preview.fallback_url} playing controls={true}/>
+                );
+            }
             if (this.props.data.preview && this.props.data.preview.images && this.props.data.preview.images.length > 0) {
                 return (
                     <div>

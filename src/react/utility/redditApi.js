@@ -9,11 +9,6 @@ redditOAuthInstance.interceptors.request.use(config => {
     return config; 
 });
 
-redditNoAuthInstance.interceptors.request.use(config => {
-    config.url = "https://www.reddit.com/" + config.url;
-    return config; 
-});
-
 const redditRequests = {};
 
 redditRequests.access_token = undefined;
@@ -25,11 +20,7 @@ redditRequests.genericGetRequest = async (url) => {
         }
     
         let response;
-        if (redditRequests.access_token) {
-            response = await redditOAuthInstance.get(url, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
-        } else {
-            response = await redditNoAuthInstance.get(url, null);
-        }
+        response = await redditOAuthInstance.get(url, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
     
         if (!response.data) {
             throw new Error('No Data Received!');
@@ -52,11 +43,7 @@ redditRequests.genericPostRequest = async (url, body) => {
         }
     
         let response;
-        if (redditRequests.access_token) {
-            response = await redditOAuthInstance.post(url, body, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
-        } else {
-            response = await redditNoAuthInstance.post(url, body, null);
-        }
+        response = await redditOAuthInstance.post(url, body, {headers: {Authorization: 'Bearer ' + redditRequests.access_token}});
     
         if (!response.data) {
             throw new Error('No Data Received!');

@@ -41,7 +41,7 @@ class RedditProfileDisplay extends Component {
 	};
 
 	getNextListingList = async () => {
-		const response = await redditApi.genericGetRequest('u/' + this.props.match.params['0'] + '/.json?after=' + this.state.after + '&raw_json=1');
+		const response = await redditApi.genericGetRequest('user/' + this.props.match.params['0'] + '/.json?after=' + this.state.after + '&raw_json=1');
 		if (!response.data.kind === 'Listing') {
 			console.error('Invalid Type of Reddit Page');
 			return;
@@ -72,6 +72,13 @@ class RedditProfileDisplay extends Component {
 		}
 		return;
 	}
+
+	getMoreIfAfterExists = () => {
+		if (this.state.after) {
+			return (<div onClick={this.getNextListingList}> Get More Results </div>);
+		}
+	}
+
 	render() {
 
         const getProperFormat = () => {
@@ -84,7 +91,7 @@ class RedditProfileDisplay extends Component {
 				<div>
 					{getProperFormat()}
 				</div>
-				<div onClick={this.getNextListingList}> Get More Results </div>
+				{this.getMoreIfAfterExists()}
 			</div>
 		);
 	}

@@ -76,6 +76,12 @@ class ListingList extends Component {
 		return 'nav-item nav-link';
 	}
 
+	getMoreIfAfterExists = () => {
+		if (this.state.after) {
+			return (<div onClick={this.getNextListingList}> Get More Results </div>);
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -92,7 +98,7 @@ class ListingList extends Component {
 					{this.state.listingArray.map( (listing) => {
 						return <Listing data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
 					})}
-					<div onClick={this.getNextListingList}> Get More Results </div>
+					{this.getMoreIfAfterExists()}
 				</main>
 			</div>
 		);

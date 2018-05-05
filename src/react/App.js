@@ -92,6 +92,9 @@ class App extends Component {
 	}
 	
 	switchMainPage = (content_data, type) => {
+		if (content_data === '[deleted]') {
+			return;
+		}
 		this.props.history.push('/' + type + '/' + content_data);
 		this.setState({
 			content_data,
