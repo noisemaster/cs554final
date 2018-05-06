@@ -30,11 +30,12 @@ class RedditPostDisplay extends Component {
 
     render() {
         return (
-            <div>
-                <RedditPost data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
-                <div/>
+            <div className="container">
+                <div className="row">
+                    <RedditPost data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
+                </div>
                 {this.state.commentList.map( (comment) => {
-					return <RedditMessage data={comment.data} key={comment.data.id} switchMainPage={this.props.switchMainPage} kind={comment.kind} link_id={this.state.mainPost.name}/>
+					return <RedditMessage data={comment.data} key={comment.data.id} switchMainPage={this.props.switchMainPage} kind={comment.kind} link_id={this.state.mainPost.name} nest_level={0}/>
 				})}       
             </div>
         )

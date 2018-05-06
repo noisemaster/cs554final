@@ -87,7 +87,7 @@ class RedditProfileDisplay extends Component {
             });
         }
 		return (
-			<div>
+			<div className="container">
 				<div>
 					{getProperFormat()}
 				</div>
