@@ -35,7 +35,7 @@ class RedditPost extends Component {
             }
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
-                    <div><img src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/></div>
+                    <img className="card-img-bottom" xl src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/>
                 );
             }
             if (this.props.data.preview && this.props.data.preview.reddit_video_preview && this.props.data.preview.reddit_video_preview.fallback_url) {
@@ -54,14 +54,16 @@ class RedditPost extends Component {
             }
         }
         return (
-        <div>
-            <h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2>
-            <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
-            <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
-            <div> Score: {this.props.data.score} </div>
-            <div> Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago </div>
-            {ifExternalLink()}
-            {ifSelfText()}
+        <div className="card">
+            <div className="card-body">
+                <h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2>
+                <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
+                <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
+                <div> Score: {this.props.data.score} </div>
+                <div> Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago </div>
+                {ifExternalLink()}
+                {ifSelfText()}
+            </div>
             {ifMedia()}
         </div>
         );
