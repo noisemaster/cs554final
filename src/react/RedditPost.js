@@ -47,7 +47,9 @@ class RedditPost extends Component {
                 return (
                     <div>
                         {this.props.data.preview.images.map( (image) => {
-						    return <img src={image.resolutions[image.resolutions.length - 1].url} alt={this.props.data.title} key={image.id}/>
+                            if (image.resolutions && image.resolutions.length && image.resolutions[image.resolutions.length - 1]) {
+                                return <img src={image.resolutions[image.resolutions.length - 1].url} alt={this.props.data.title} key={image.id}/>
+                            }
 					    })}
                     </div>
                 );
