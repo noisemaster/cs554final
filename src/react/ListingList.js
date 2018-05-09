@@ -71,9 +71,9 @@ class ListingList extends Component {
 
 	isTypeActive = type => {
 		if (this.state.type === type) {
-			return 'nav-item nav-link active';
+			return 'btn btn-primary';
 		}
-		return 'nav-item nav-link';
+		return 'btn btn-outline-primary ml-1';
 	}
 
 	getMoreIfAfterExists = () => {
@@ -81,20 +81,20 @@ class ListingList extends Component {
 			return (<div onClick={this.getNextListingList}> Get More Results </div>);
 		}
 	}
-
+	
 	render() {
 		return (
 			<div>
-				<div className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-					<div className="navbar-nav">
-						<a href="#" className={this.isTypeActive('hot')} onClick={() => this.setType('hot')}> Hot </a>
-						<a href="#" className={this.isTypeActive('new')} onClick={() => this.setType('new')}> New </a>
-						<a href="#" className={this.isTypeActive('controversial')} onClick={() => this.setType('controversial')}> Controversial </a>
-						<a href="#" className={this.isTypeActive('top')} onClick={() => this.setType('top')}> Top </a>
-						<a href="#" className={this.isTypeActive('rising')}  onClick={() => this.setType('rising')}> Rising </a>
-					</div>
-				</div>
 				<main className="container">
+					<div className="navbar navbar-expand-lg navbar-light justify-content-md-center">
+						<div className="navbar-nav">
+							<button type="button" className={this.isTypeActive('hot')} onClick={() => this.setType('hot')}> Hot </button>
+							<button type="button" className={this.isTypeActive('new')} onClick={() => this.setType('new')}> New </button>
+							<button type="button" className={this.isTypeActive('controversial')} onClick={() => this.setType('controversial')}> Controversial </button>
+							<button type="button" className={this.isTypeActive('top')} onClick={() => this.setType('top')}> Top </button>
+							<button type="button" className={this.isTypeActive('rising')}  onClick={() => this.setType('rising')}> Rising </button>
+						</div>
+					</div>
 					{this.state.listingArray.map( (listing) => {
 						return <Listing data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>
 					})}
