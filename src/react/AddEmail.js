@@ -47,7 +47,7 @@ class AddEmail extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="container">
 				<h2> Enter an Email to Register... </h2>
 				{this.displayIfEmail()}
 				<form className="form-inline my-2 my-lg-0" id="subredditSearchForm" onSubmit={this.onSubmit}>
