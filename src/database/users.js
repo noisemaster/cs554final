@@ -5,6 +5,7 @@ const fs = require('fs');
 const users = module.exports;
 
 users.TABLE_NAME = 'usertable';
+users.COLOR_TABLE = 'colortable';
 
 let dbPool = null;
 
@@ -37,7 +38,13 @@ users.config = async function () {
 	const dbPool = await users.getDatabasePool();
 	try {
 		await database.createUserTable(dbPool, users.TABLE_NAME);
+		await database.createColorTable(dbPool, users.COLOR_TABLE);
+		/*
+		await database.insertColor(dbPool, users.COLOR_TABLE, {'color': '#58FA58'});
+		await database.insertColor(dbPool, users.COLOR_TABLE, {'color': '#08088A'});
+		await database.insertColor(dbPool, users.COLOR_TABLE, {'color': '#DF0101'});
+		*/
 	} catch (e) {
-		console.log('Failed to Create User Table!: ' + e);
+		console.log('Failed to Create User or Color Table!: ' + e);
 	}
 };
