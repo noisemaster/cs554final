@@ -15,7 +15,7 @@ class SubredditQueryEntry extends Component {
 
     render() {
         return (
-            <div onClick={() => this.props.switchMainPage('r/' + this.props.data.title , 'Listing')}>
+            <div onClick={() => this.props.switchMainPage(this.props.data.url.substring(1, this.props.data.url.length - 1) , 'Listing')}>
                 {this.ifIconImg()}
                 <div> {this.props.data.url} </div>
                 <div> Subscribers: {this.props.data.subscribers} </div>
