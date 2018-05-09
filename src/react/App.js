@@ -127,7 +127,11 @@ class App extends Component {
 				</Switch>
 			);
 		}
-		return (<div> Please Log In to Continue </div>);
+		return (
+			<div className="container">
+				<p>Please Log In to Continue</p>
+			</div>
+		);
 	}
 
 	render() {

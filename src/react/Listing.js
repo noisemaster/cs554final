@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import helper from '../helper';
 
 class Listing extends Component {
@@ -30,10 +31,10 @@ class Listing extends Component {
         <div className="media">
             {ifThumbnail()}
             <div className="media-body">
-                <h5 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h5>
+                <Link to={'/RedditPostDisplay/' + this.props.data.permalink}>{this.props.data.title}</Link>
                 {ifExternalUrl()}
-                <p onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</p>
-                <p onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>Posted By u/{this.props.data.author}</p>
+                <Link to={'/Listing/' + this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link>
+                <p>Posted By <Link to={"/RedditProfileDisplay/" + this.props.data.author}>u/{this.props.data.author}</Link></p>
                 <p>Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
             </div>
         </div>
