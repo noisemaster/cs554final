@@ -4,8 +4,41 @@ const fs = require('fs');
 const path = require('path');
 const database = require('../../database/index')();
 const sgMail = require('@sendgrid/mail');
+const cron = require('cron');
 
 let sendGridApiKey;
+
+let sendMail = new cron.CronJob({
+    cronTime: '* * * * *',
+    onTick: async function()
+    {
+        console.log("Starting mail job");
+
+        //Get all users with an email
+        let result = await getUsers();
+        const users = result.rows;
+
+        let response;
+
+        for(let i = 0; i < users.length; i++)
+        {
+            response = null;
+            console.log("Generating content for user " + users[i].username);
+            response = await redisMessage.sendMessage('generateContent', {user: users[i]});
+
+            if(!response)
+            {
+                console.log("Could not generate content for user " + users[i].username);
+            }
+            else
+            {
+                sendEmailContent(users[i], response);
+            }
+        }
+    },
+    start: false,
+    timeZone: 'America/New_York'
+});
 
 async function main()
 {
@@ -27,27 +60,7 @@ async function main()
     
     sgMail.setApiKey(sendGridApiKey);
 
-    //Get all users with an email
-    let result = await getUsers();
-    const users = result.rows;
-
-    let response;
-
-    for(let i = 0; i < users.length; i++)
-    {
-        response = null;
-        console.log("Generating content for user " + users[i].username);
-        response = await redisMessage.sendMessage('generateContent', {user: users[i]});
-
-        if(!response)
-        {
-            console.log("Could not generate content for user " + users[i].username);
-        }
-        else
-        {
-            sendEmailContent(users[i], response);
-        }
-    }
+    sendMail.start();
 }
 
 async function getUsers()
