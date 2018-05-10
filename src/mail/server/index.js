@@ -1,6 +1,6 @@
 const redisMessage = require('./redis-message-wrapper');
 const users = require('../../database/users');
-const database = require('../../database/index');
+const database = require('../../database/index')();
 const sgMail = require('@sendgrid/mail');
 
 async function main() {
