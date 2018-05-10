@@ -4,7 +4,7 @@ const database = require('../../database/index');
 const sgMail = require('@sendgrid/mail');
 
 async function main() {
-    sgMail.setApiKey('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');
+    sgMail.setApiKey();
 
     let result = await getUsers();
     const users = result.Result.rows;
@@ -26,8 +26,6 @@ async function getUsers()
 
 async function sendEmailContent(user, content)
 {
-    
-    
     const msg = {
       to: user.email,
       from: 'info@scrubsoft.com',
@@ -35,6 +33,7 @@ async function sendEmailContent(user, content)
       text: 'and easy to do anywhere, even with Node.js',
       html: '<strong>and easy to do anywhere, even with Node.js</strong>',
     };
+
     sgMail.send(msg);
 }
 

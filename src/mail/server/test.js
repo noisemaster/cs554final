@@ -1,7 +1,7 @@
 // using SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+sgMail.setApiKey('');
 const msg = {
   to: 'info@scrubsoft.com',
   from: 'amassenzz@stevens.edu',
