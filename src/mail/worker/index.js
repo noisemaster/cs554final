@@ -24,7 +24,9 @@ async function init()
 
             for(let i = 0; i < frontPage.length; i++)
             {
-                content += "<li>" + frontPage[i] + "</li>"
+                content += "<li>" + frontPage[i]; //Post name
+                //content += "<ul><li>" + url[i] + "</ul></li>"; //url
+                content += "</li>";
             }
 
             content += "</ul>"
