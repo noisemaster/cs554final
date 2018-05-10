@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import redditApi from './utility/redditApi';
 import RedditMessage from './RedditMessage';
 import RedditPost from './RedditPost';
+import DocumentTitle from 'react-document-title';
 
 class RedditPostDisplay extends Component {
     constructor(props) {
@@ -28,16 +29,26 @@ class RedditPostDisplay extends Component {
         });
     }
 
+    getTitle = () => {
+        if (this.state.mainPost !== undefined) {
+            return this.state.mainPost.title + " - Viewit";
+        } else {
+            return "Post Loading - Viewit";
+        }
+    }
+
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <RedditPost data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
+            <DocumentTitle title={this.getTitle()}>
+                <div className="container">
+                    <div className="row">
+                        <RedditPost profile={false} data={this.state.mainPost} switchMainPage={this.props.switchMainPage}/>
+                    </div>
+                    {this.state.commentList.map( (comment) => {
+                        return <RedditMessage data={comment.data} key={comment.data.id} switchMainPage={this.props.switchMainPage} kind={comment.kind} link_id={this.state.mainPost.name} nest_level={0}/>
+                    })}       
                 </div>
-                {this.state.commentList.map( (comment) => {
-					return <RedditMessage data={comment.data} key={comment.data.id} switchMainPage={this.props.switchMainPage} kind={comment.kind} link_id={this.state.mainPost.name} nest_level={0}/>
-				})}       
-            </div>
+            </DocumentTitle>
         )
     }
 }

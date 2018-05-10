@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Linkify from 'linkifyjs/react';
 import helper from '../helper';
+import {Link} from 'react-router-dom';
 import Interweave from 'interweave';
 import LinkTransform from './InterweaveLinkTransform';
 import ReactPlayer from 'react-player';
@@ -48,7 +49,7 @@ class RedditPost extends Component {
                     <div>
                         {this.props.data.preview.images.map( (image) => {
                             if (image.resolutions && image.resolutions.length && image.resolutions[image.resolutions.length - 1]) {
-                                return <img src={image.resolutions[image.resolutions.length - 1].url} alt={this.props.data.title} key={image.id}/>
+                                return <img className="card-img-bottom" src={image.resolutions[image.resolutions.length - 1].url} alt={this.props.data.title} key={image.id}/>
                             }
 					    })}
                     </div>
@@ -56,18 +57,25 @@ class RedditPost extends Component {
             }
         }
         return (
-        <div className="card">
-            <div className="card-body">
-                <h2 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h2>
-                <div onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</div>
-                <div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
-                <div> Score: {this.props.data.score} </div>
-                <div> Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago </div>
-                {ifExternalLink()}
-                {ifSelfText()}
+            <div className="card w-100 mb-4 mt-4">
+                    <header className="card-header text-center">
+                        {this.props.profile ? 
+                            <h2><Link to={'/RedditPostDisplay/' + this.props.data.permalink}>{this.props.data.title}</Link></h2> :
+                            <h2>{this.props.data.title}</h2>
+                        }
+                        <p>
+                            Posted by <Link to={'/RedditProfileDisplay/' +  this.props.data.author}>u/{this.props.data.author}</Link> in <Link to={'/Listing/' +  this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link> with {this.props.data.score} points
+                        </p>
+                    </header>
+                {ifMedia()}
+                <div className="card-body">
+                    {ifExternalLink()}
+                    {ifSelfText()}
+                </div>
+                <div className="card-footer text-muted">
+                    Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago
+                </div>
             </div>
-            {ifMedia()}
-        </div>
         );
     }
 }

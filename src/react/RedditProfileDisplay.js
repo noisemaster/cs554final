@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DocumentTitle from 'react-document-title';
 import redditApi from './utility/redditApi';
 import RedditPost from './RedditPost';
 import RedditMessage from './RedditMessage';
@@ -65,7 +66,7 @@ class RedditProfileDisplay extends Component {
 
 	decipherItemType = (listing) => {
 		if (listing.kind === 't3' || listing.data.name.match('/^t3_/')) {
-			return (<RedditPost data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>);
+			return (<RedditPost profile={true} data={listing.data} key={listing.data.id} switchMainPage={this.props.switchMainPage}/>);
 		}
 		if (listing.kind === 't1' || listing.data.name.match('/^t1_/')) {
 			return (<RedditMessage data={listing.data} profileMessage={true} key={listing.data.id} switchMainPage={this.props.switchMainPage} showReplies={false}/>);
@@ -75,7 +76,7 @@ class RedditProfileDisplay extends Component {
 
 	getMoreIfAfterExists = () => {
 		if (this.state.after) {
-			return (<div onClick={this.getNextListingList}> Get More Results </div>);
+			return (<button type="button" className="btn btn-primary" onClick={this.getNextListingList}> Get More Results </button>);
 		}
 	}
 
@@ -87,12 +88,14 @@ class RedditProfileDisplay extends Component {
             });
         }
 		return (
-			<div className="container">
-				<div>
-					{getProperFormat()}
+			<DocumentTitle title={this.props.match.params['0'] + "'s profile page - Viewit"}>
+				<div className="container">
+					<div>
+						{getProperFormat()}
+					</div>
+					{this.getMoreIfAfterExists()}
 				</div>
-				{this.getMoreIfAfterExists()}
-			</div>
+			</DocumentTitle>
 		);
 	}
 }
