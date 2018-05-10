@@ -28,16 +28,16 @@ class Listing extends Component {
         }
 
         return (
-        <div className="media">
-            {ifThumbnail()}
-            <div className="media-body">
-                <Link to={'/RedditPostDisplay/' + this.props.data.permalink}>{this.props.data.title}</Link>
-                {ifExternalUrl()}
-                <Link to={'/Listing/' + this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link>
-                <p>Posted By <Link to={"/RedditProfileDisplay/" + this.props.data.author}>u/{this.props.data.author}</Link></p>
-                <p>Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
+            <div className="media">
+                {ifThumbnail()}
+                <div className="media-body">
+                    <Link to={'/RedditPostDisplay/' + this.props.data.permalink.substring(1)}>{this.props.data.title}</Link>
+                    {ifExternalUrl()}
+                    <Link to={'/Listing/' + this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link>
+                    <p>Posted By <Link to={"/RedditProfileDisplay/" + this.props.data.author}>u/{this.props.data.author}</Link></p>
+                    <p>Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
+                </div>
             </div>
-        </div>
         );
     }
 }
