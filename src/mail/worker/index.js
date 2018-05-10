@@ -16,8 +16,22 @@ async function init()
                 redisConnection.emit('generateContent:response:' + message.requestID, {error: 'No user to generate content for.'});
                 return;           
             }
-            const tempPerson = addPerson(message.data);
-            redisConnection.emit('generateContent:response:' + message.requestID, {data: tempPerson});
+
+            let content = message.data.user.username + ", here are some posts you might have missed!</br>";
+            content += "<ul>"
+
+            const frontPage = ["post1", "post2", "post3"];
+
+            for(let i = 0; i < frontPage.length; i++)
+            {
+                content += "<li>" + frontPage[i] + "</li>"
+            }
+
+            content += "</ul>"
+
+            console.log(content);
+
+            redisConnection.emit('generateContent:response:' + message.requestID, {data: content});
         }
         catch (e)
         {

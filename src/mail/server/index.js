@@ -1,18 +1,52 @@
 const redisMessage = require('./redis-message-wrapper');
 const users = require('../../database/users');
+const fs = require('fs');
+const path = require('path');
 const database = require('../../database/index')();
 const sgMail = require('@sendgrid/mail');
 
-async function main() {
-    sgMail.setApiKey();
+let sendGridApiKey;
 
+async function main()
+{
+    //Get the api key from data folder
+    const data = fs.readFileSync(path.join(__dirname, '../../../data/sendGridApi.json'));
+
+    if (!data) {
+		console.error('No SendGrid API Key Found');
+		process.exit(1);
+	}
+
+	const jsonData = JSON.parse(data);
+	if (!jsonData.api_key) {
+		console.error('Invalid SendGrid API Key Found');
+		process.exit(1);
+	}
+
+	sendGridApiKey = jsonData.api_key;
+    
+    sgMail.setApiKey(sendGridApiKey);
+
+    //Get all users with an email
     let result = await getUsers();
-    const users = result.Result.rows;
+    const users = result.rows;
+
+    let response;
 
     for(let i = 0; i < users.length; i++)
     {
-        let response = await redisMessage.sendMessage('generateContent', {user: user[i]});
-        sendEmailContent(user[i], response);
+        response = null;
+        console.log("Generating content for user " + users[i].username);
+        response = await redisMessage.sendMessage('generateContent', {user: users[i]});
+
+        if(!response)
+        {
+            console.log("Could not generate content for user " + users[i].username);
+        }
+        else
+        {
+            sendEmailContent(users[i], response);
+        }
     }
 }
 
@@ -20,7 +54,6 @@ async function getUsers()
 {
     let dbPool = await users.getDatabasePool();
     let allUsers = await database.getAllWithEmails(dbPool, users.TABLE_NAME);
-    console.log(allUsers);
     return allUsers;
 }
 
@@ -30,8 +63,7 @@ async function sendEmailContent(user, content)
       to: user.email,
       from: 'info@scrubsoft.com',
       subject: 'ViewIt Frontpage',
-      text: 'and easy to do anywhere, even with Node.js',
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      html: content,
     };
 
     sgMail.send(msg);
