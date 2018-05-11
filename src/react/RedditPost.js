@@ -15,7 +15,7 @@ class RedditPost extends Component {
         const ifExternalLink = () => {
             if (this.props.data.url) {
                 return (
-                    <div><a href={this.props.data.url}>{this.props.data.url}</a></div>
+                    <a href={this.props.data.url}>{this.props.data.url}</a>
                 );
             }
         }
@@ -31,7 +31,7 @@ class RedditPost extends Component {
         const ifMedia = () => {
             if (this.props.data.media && this.props.data.media.reddit_video && this.props.data.media.reddit_video.dash_url) {
                 return (
-                    <ReactPlayer url={this.props.data.media.reddit_video.fallback_url} playing controls={true}/>
+                    <ReactPlayer width="100%" height="100%" url={this.props.data.media.reddit_video.fallback_url} playing controls={true}/>
                 );
             }
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
@@ -41,7 +41,7 @@ class RedditPost extends Component {
             }
             if (this.props.data.preview && this.props.data.preview.reddit_video_preview && this.props.data.preview.reddit_video_preview.fallback_url) {
                 return (
-                    <ReactPlayer url={this.props.data.preview.reddit_video_preview.fallback_url} playing controls={true}/>
+                    <ReactPlayer width="100%" height="100%" url={this.props.data.preview.reddit_video_preview.fallback_url} playing controls={true}/>
                 );
             }
             if (this.props.data.preview && this.props.data.preview.images && this.props.data.preview.images.length > 0) {
