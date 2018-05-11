@@ -9,7 +9,7 @@ const cron = require('cron');
 let sendGridApiKey;
 
 let sendMail = new cron.CronJob({
-    cronTime: '* * * * *',
+    cronTime: '* */1 * * *',
     onTick: async function()
     {
         console.log("Starting mail job");
