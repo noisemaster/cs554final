@@ -92,7 +92,7 @@ class App extends Component {
 
 	setColor = color_choice => {
 		this.setState({
-			color_choice
+			color_choice: {color: color_choice}
 		});
 	}
 

@@ -66,7 +66,7 @@ class PageHeader extends Component {
 
 	render() {
 		return (
-		<nav className="navbar navbar-expand-lg sticky-top navbar-dark" style={this.props.color !== null ? {backgroundColor: this.props.color} : {backgroundColor: '#343a40'}}>
+		<nav className="navbar navbar-expand-lg sticky-top navbar-dark" style={this.props.color !== null ? {backgroundColor: this.props.color.color} : {backgroundColor: '#343a40'}}>
 			<div className="navbar-brand mb-0 h1">ViewIt</div>
 			<ul className="navbar-nav mr-auto">
 				<li className="nav-item">

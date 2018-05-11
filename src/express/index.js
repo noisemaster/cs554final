@@ -245,7 +245,7 @@ async function main() {
 			}
 	
 			dbPool = await users.getDatabasePool();
-			await database.updateUser(dbPool, users.TABLE_NAME, {id: req.cookies.cs554RedditReader, color_choice: req.body.color_choice});
+			await database.updateUser(dbPool, users.TABLE_NAME, {id: req.cookies.cs554RedditReader, color_choice: {color: req.body.color_choice}});
 
 			res.sendStatus(200);
 		} catch (e) {

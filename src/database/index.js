@@ -128,87 +128,11 @@ const Database = function () {
             ' email TEXT,' +
             ' access_token TEXT,' +
             ' refresh_token TEXT,' +
-            ' color_choice TEXT' +
+            ' color_choice jsonb' +
             ' );';
 
         const client = await dbPool.connect();
         const result = await client.query(format(createTable, tableName));
-        client.release();
-
-        return result;
-    };
-
-    this.createColorTable = async function (dbPool, tableName) {
-        if (!dbPool) {
-            throw 'Invalid dbPool Object';
-        }
-
-        if (!helper.isValidString(tableName)) {
-            throw 'Invalid Table Name for Creating User Table';
-        }
-
-        const createTable = 'CREATE TABLE IF NOT EXISTS %I (' +
-            ' id SERIAL PRIMARY KEY,' +
-            ' data jsonb' +
-            ' );';
-
-        const client = await dbPool.connect();
-        const result = await client.query(format(createTable, tableName));
-        client.release();
-
-        return result;
-    };
-
-    this.getColors = async function(dbPool, tableName) {
-        if (!dbPool) {
-            throw 'Invalid dbPool Object';
-        }
-
-        if (!helper.isValidString(tableName)) {
-            throw 'Invalid Table Name for Getting ID';
-        }
-
-        const selectQuery = "SELECT data->>'color' as color FROM %I;";
-
-        const client = await dbPool.connect();
-        const result = await client.query(format(selectQuery, tableName));
-        client.release();
-
-        return result;
-    };
-
-    this.insertColor = async function(dbPool, tableName, color) {
-        if (!dbPool) {
-            throw 'Invalid dbPool Object';
-        }
-
-        if (!helper.isValidString(tableName)) {
-            throw 'Invalid Table Name for Inserting color';
-        }
-
-        if (!color) {
-            throw 'Invalid color Object to Insert into Database';
-        }
-
-        if (!helper.isValidString(color.color)) {
-            throw 'Invalid username for User To Insert into User Table';
-        }
-
-        const insertIntoTable = 'INSERT INTO %I (' +
-            'data) VALUES ' +
-            '($1);';
-
-        const formattedQuery = format(
-            insertIntoTable,
-            tableName
-        );
-
-        const valueArray = [];
-
-        valueArray.push(color);
-
-        const client = await dbPool.connect();
-        const result = await client.query(formattedQuery, valueArray);
         client.release();
 
         return result;
@@ -244,8 +168,8 @@ const Database = function () {
         if (!helper.isValidStringIfExists(user.refresh_token)) {
             throw 'Invalid refresh_token for User to Insert into User Table';
         }
-        if (!helper.isValidStringIfExists(user.color_choice)) {
-            throw 'Invalid color_choice for User to Insert into User Table';
+        if (!user.color_choice) {
+            user.color_choice = undefined;
         }
 
         const insertIntoTable = 'INSERT INTO %I (' +
