@@ -38,7 +38,6 @@ users.config = async function () {
 	const dbPool = await users.getDatabasePool();
 	try {
 		await database.createUserTable(dbPool, users.TABLE_NAME);
-		await database.createColorTable(dbPool, users.COLOR_TABLE);
 		/*
 		await database.insertColor(dbPool, users.COLOR_TABLE, {'color': '#58FA58'});
 		await database.insertColor(dbPool, users.COLOR_TABLE, {'color': '#08088A'});
