@@ -24,7 +24,14 @@ let sendMail = new cron.CronJob({
         {
             response = null;
             console.log("Generating content for user " + users[i].username);
-            response = await redisMessage.sendMessage('generateContent', {user: users[i]});
+            try
+            {
+                response = await redisMessage.sendMessage('generateContent', {user: users[i]});
+            }
+            catch(e)
+            {
+                console.log(e);
+            }
 
             if(!response)
             {
