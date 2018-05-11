@@ -28,7 +28,7 @@ class RedditSearchBar extends Component {
 	render() {
 		return (
 			<form className="form-inline my-2 my-lg-0" id="subredditSearchForm" onSubmit={this.onSubmit}>
-				<label className="sr-only" for="subredditSearch">Search</label>
+				<label className="sr-only" htmlFor="subredditSearch">Search</label>
 				<input
 					type="text"
 					value={this.state.subredditQuery}

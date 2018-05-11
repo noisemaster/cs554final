@@ -22,7 +22,8 @@ class App extends Component {
 			token: undefined,
 			content_data: '',
 			type: 'Listing',
-			redirect: false
+			redirect: false,
+			color_choice: '',
 		}
 	}
 
@@ -36,6 +37,7 @@ class App extends Component {
 					response.name = undefined;
 					response.token = undefined;
 					response.email = undefined;
+					response.color_choice = null;
 					authenticated = false;
 				}
 				this.setState({
@@ -43,6 +45,7 @@ class App extends Component {
 					username: response.username,
 					email: response.email,
 					token: response.access_token,
+					color_choice: response.color_choice
 				});
 				redditApi.setAccessToken(this.state.token);
 				this.switchMainPage('', 'Home');
@@ -63,6 +66,7 @@ class App extends Component {
 						response.name = undefined;
 						response.email = undefined;
 						response.token = undefined;
+						response.color_choice = null;
 						authenticated = false;
 					}
 					this.setState({
@@ -70,6 +74,7 @@ class App extends Component {
 						username: response.username,
 						email: response.email,
 						token: response.access_token,
+						color_choice: response.color_choice
 					});
 					redditApi.setAccessToken(this.state.token);
 				} catch (e) {
@@ -84,6 +89,13 @@ class App extends Component {
 			email: email
 		});
 	}
+
+	setColor = color_choice => {
+		this.setState({
+			color_choice
+		});
+	}
+
 
 	setToken = (token) => {
 		this.setState({
@@ -113,7 +125,7 @@ class App extends Component {
 						return(<ListingList {...props} data={''} switchMainPage={this.switchMainPage}/>)
 					}}/>
 					<Route path='/Register' render={(props) => {
-						return (<AddEmail {...props} email={this.state.email} setEmail={this.setEmail}/>);
+						return (<AddEmail {...props} email={this.state.email} setEmail={this.setEmail} color={this.state.color_choice} setColor={this.setColor}/>);
 					}}/>
 					<Route path='/RedditQueryDisplay/*' render={(props) => {
 						return(<RedditQueryDisplay {...props} switchMainPage={this.switchMainPage}/>)
@@ -137,7 +149,7 @@ class App extends Component {
 	render() {
 		return (
 		<div className="App">
-			<PageHeader username={this.state.username} authenticated={this.state.authenticated} setToken={this.setToken} switchMainPage={this.switchMainPage}/>
+			<PageHeader username={this.state.username} authenticated={this.state.authenticated} setToken={this.setToken} switchMainPage={this.switchMainPage} color={this.state.color_choice}/>
 			{this.displayIfAuthenticated()}
 		</div>
 		);
