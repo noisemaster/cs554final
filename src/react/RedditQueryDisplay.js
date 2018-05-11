@@ -114,7 +114,7 @@ class RedditQueryList extends Component {
                         </div>
                     </div>
                     {this.returnProperHTML()}
-					<div onClick={this.getNextListingList}> Get More Results </div>
+					<button type="button" className="btn btn-primary" onClick={this.getNextListingList}> Get More Results </button>
 				</main>
 			</DocumentTitle>
 		);

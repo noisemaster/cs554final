@@ -94,7 +94,7 @@ class RedditMessage extends Component {
 				);
 			}
 			return (
-				<div onClick={() => {showMore()}}> Click to Show More Comments </div>
+				<button className="btn btn-primary mb-3" onClick={() => {showMore()}}> Click to Show More Comments </button>
 			);
 		}
 		

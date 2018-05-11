@@ -78,7 +78,7 @@ class ListingList extends Component {
 
 	getMoreIfAfterExists = () => {
 		if (this.state.after) {
-			return (<div onClick={this.getNextListingList}> Get More Results </div>);
+			return (<button type="button" className="btn btn-primary mb-2" onClick={this.getNextListingList}> Get More Results </button>);
 		}
 	}
 
