@@ -34,7 +34,6 @@ async function init()
     client_secret = jsonData.client_secret;
 
     redisConnection.on('generateContent:request:*', async (message,channel) => {
-        console.log(message);
 
         if (!message || !message.requestID) {
             console.log('Bad Request: Incapable of Sending a Response');
@@ -51,7 +50,6 @@ async function init()
             let userInfo = message.data.user;
 
             const tokenInfo = await requests.refreshAccessToken(client_id, client_secret, userInfo.refresh_token, BASE_URI + PORT + REDIRECT_PATH);
-            console.log(tokenInfo);
 
             //Update user token
             const user = {};
@@ -62,7 +60,6 @@ async function init()
             await database.updateUser(dbPool, users.TABLE_NAME, user);
             
             const redditResponse = await requests.genericGetRequest('/hot/.json?raw_json=1', tokenInfo.access_token);
-            console.log(redditResponse);
 
             let content = userInfo.username + ", here are some posts you might have missed!</br>";
             content += "<ul>"
@@ -80,8 +77,6 @@ async function init()
             }
 
             content += "</ul>"
-
-            console.log(content);
 
             redisConnection.emit('generateContent:response:' + message.requestID, {data: content});
         }

@@ -27,19 +27,19 @@ let sendMail = new cron.CronJob({
             try
             {
                 response = await redisMessage.sendMessage('generateContent', {user: users[i]});
+
+                if(!response)
+                {
+                    console.log("Could not generate content for user " + users[i].username);
+                }
+                else
+                {
+                    sendEmailContent(users[i], response);
+                }
             }
             catch(e)
             {
                 console.log(e);
-            }
-
-            if(!response)
-            {
-                console.log("Could not generate content for user " + users[i].username);
-            }
-            else
-            {
-                sendEmailContent(users[i], response);
             }
         }
     },
@@ -85,8 +85,11 @@ async function sendEmailContent(user, content)
       subject: 'ViewIt Frontpage',
       html: content,
     };
-
-    sgMail.send(msg);
+    try {
+        await sgMail.send(msg);
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 main();
