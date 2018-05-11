@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import redditApi from './utility/redditApi';
 import Linkify from 'linkifyjs/react';
 import helper from '../helper';
+import {Link} from 'react-router-dom';
 import Interweave from 'interweave';
 import LinkTransform from './InterweaveLinkTransform';
 
@@ -35,6 +36,14 @@ class RedditMessage extends Component {
 		}
 	}
 
+	padComment = () => {
+		if (this.props.nest_level !== 0) {
+			return <div style={{
+				width: '1rem'
+			}} />
+		}
+	}
+
 	render() {
 
 		const getRepliesCount = () => {
@@ -57,7 +66,7 @@ class RedditMessage extends Component {
 			if (this.props.data.replies) {
 				if (!this.state.showReplies) {
 					return (
-						<div onClick={() => {this.setShowReplies(true);}}> Show Replies </div>
+						<button onClick={() => {this.setShowReplies(true)}} type="button" className="btn btn-primary mb-3">Show {getRepliesCount() === 1 ? '1 Reply' : `${getRepliesCount()} Replies`}</button>
 					);
 				} else {
 					return (
@@ -65,7 +74,7 @@ class RedditMessage extends Component {
 							{ this.props.data.replies.data.children.map( (replies) => {
 								return <RedditMessage data={replies.data} key={replies.data.id} switchMainPage={this.props.switchMainPage} showReplies={true} kind={replies.kind} link_id={this.props.link_id} nest_level={this.props.nest_level+1}/>
 							})}
-							<div onClick={() => {this.setShowReplies(false);}}> Collapse Replies </div>
+							<button type="button" className="btn btn-danger mb-3" onClick={() => {this.setShowReplies(false);}}> Collapse Replies </button>
 						</div> 
 					);
 				}
@@ -93,7 +102,7 @@ class RedditMessage extends Component {
 				);
 			}
 			return (
-				<div onClick={() => {showMore()}}> Click to Show More Comments </div>
+				<button className="btn btn-primary mb-3" onClick={() => {showMore()}}> Click to Show More Comments </button>
 			);
 		}
 		
@@ -109,9 +118,9 @@ class RedditMessage extends Component {
 				return (
 					<div className="media">
 						<div className="media-body">
-							<span>u/{this.props.data.author}</span> commented on 
-							<span onClick={() => {this.props.switchMainPage(this.props.data.permalink.split('/').slice(0,-2).join('/'), 'RedditPostDisplay')}}> {this.props.data.link_title}</span> in 
-							<span onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}> {this.props.data.subreddit_name_prefixed}</span>
+							u/{this.props.data.author} commented on 
+							<Link to={'/RedditPostDisplay/' + this.props.data.permalink.split('/').slice(0,-2).join('/')}> {this.props.data.link_title}</Link> in 
+							<Link to={'/Listing/' + this.props.data.subreddit_name_prefixed}> {this.props.data.subreddit_name_prefixed}</Link>
 							<div>
 								<Linkify>
 									<Interweave tagname='fragment' transform={LinkTransform} content={this.props.data.body_html}/>
@@ -122,12 +131,11 @@ class RedditMessage extends Component {
 				);
 			}
 			return (
-				<div className={`media pl-${this.props.nest_level}`}>
+				<div className="media">
+					{this.padComment()}
 					<div className="media-body">
-						<div onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>u/{this.props.data.author}</div>
-						<div> Replied {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</div>
+						<h5><Link to={'/RedditProfileDisplay/' + this.props.data.author}>u/{this.props.data.author}</Link> replied {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</h5>
 						<Linkify><Interweave tagName='fragment' transform={LinkTransform} content={this.props.data.body_html}/></Linkify>
-						{showIfReplies()}
 						{replies()}
 					</div>
 				</div>

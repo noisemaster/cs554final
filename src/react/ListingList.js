@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import redditApi from './utility/redditApi';
 import Listing from './Listing';
-
+import DocumentTitle from 'react-document-title';
 
 class ListingList extends Component {
 	constructor (props) {
@@ -71,20 +71,27 @@ class ListingList extends Component {
 
 	isTypeActive = type => {
 		if (this.state.type === type) {
-			return 'btn btn-primary';
+			return 'btn btn-primary ml-1';
 		}
 		return 'btn btn-outline-primary ml-1';
 	}
 
 	getMoreIfAfterExists = () => {
 		if (this.state.after) {
-			return (<div onClick={this.getNextListingList}> Get More Results </div>);
+			return (<button type="button" className="btn btn-primary mb-2" onClick={this.getNextListingList}> Get More Results </button>);
 		}
 	}
-	
+
+	getPageTitle = () => {
+		if (Object.keys(this.props.match.params).length === 0 && this.props.match.params.constructor === Object) {
+			return "Home - Viewit";
+		}
+		return this.props.match.params[0] + " - Viewit";
+	}
+
 	render() {
 		return (
-			<div>
+			<DocumentTitle title={this.getPageTitle()}>
 				<main className="container">
 					<div className="navbar navbar-expand-lg navbar-light justify-content-md-center">
 						<div className="navbar-nav">
@@ -100,7 +107,7 @@ class ListingList extends Component {
 					})}
 					{this.getMoreIfAfterExists()}
 				</main>
-			</div>
+			</DocumentTitle>
 		);
 	}
 }

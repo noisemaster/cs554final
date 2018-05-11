@@ -41,10 +41,10 @@ class PageHeader extends Component {
 			return (
 				<React.Fragment>
 					<li className='nav-item'>
-						<Link className='nav-link' to='/Register'> Register Email </Link>
+						<Link className='nav-link' to='/Register'> Settings </Link>
 					</li>
 					<li className="nav-item">
-						<div className="navbar-text"> {this.props.username} </div>
+						<Link className="nav-link" to={'/RedditProfileDisplay/' + this.props.username}> {this.props.username} </Link>
 					</li>
 					<li className='nav-item'>
 						<div className='nav-link' onClick={this.logOut}> Log Out </div>
@@ -66,7 +66,7 @@ class PageHeader extends Component {
 
 	render() {
 		return (
-		<nav className="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+		<nav className="navbar navbar-expand-lg sticky-top navbar-dark" style={this.props.color !== null ? {backgroundColor: this.props.color} : {backgroundColor: '#343a40'}}>
 			<div className="navbar-brand mb-0 h1">ViewIt</div>
 			<ul className="navbar-nav mr-auto">
 				<li className="nav-item">

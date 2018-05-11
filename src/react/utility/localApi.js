@@ -28,4 +28,9 @@ localRequests.setEmail = async (email) => {
     return request.data;
 }
 
+localRequests.setColorChoice = async (color_choice) => {
+    const request = await localInstance.post('/register/color', {color_choice});
+    return request.data;
+}
+
 export default localRequests;

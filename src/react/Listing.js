@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import helper from '../helper';
 
 class Listing extends Component {
@@ -6,14 +7,14 @@ class Listing extends Component {
         const ifThumbnail = () => {
             if (this.props.data.media && this.props.data.media.oembed && this.props.data.media.oembed.thumbnail_url) {
                 return (
-                    <img className="mr-3 thumbnail" src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.media.oembed.description}/>
+                    <img className="mr-3 align-self-center thumbnail" src={this.props.data.media.oembed.thumbnail_url} alt={this.props.data.title}/>
                 );
             } 
             if (this.props.data.thumbnail && this.props.data.thumbnail_height && this.props.data.thumbnail_width
                 && this.props.data.thumbnail !== 'self' && this.props.data.thumbnail !== 'default'
                 && this.props.data.thumbnail !== 'image' && this.props.data.thumbnail !== 'nsfw' ) {
                 return (
-                    <img className="mr-3 thumbnail" src={this.props.data.thumbnail} alt={this.props.data.title}/>
+                    <img className="mr-3 align-self-center thumbnail" src={this.props.data.thumbnail} alt={this.props.data.title}/>
                 );
             }
         }
@@ -27,16 +28,16 @@ class Listing extends Component {
         }
 
         return (
-        <div className="media">
-            {ifThumbnail()}
-            <div className="media-body">
-                <h5 onClick={() => {this.props.switchMainPage(this.props.data.permalink, 'RedditPostDisplay')}}>{this.props.data.title}</h5>
-                {ifExternalUrl()}
-                <p onClick={() => {this.props.switchMainPage(this.props.data.subreddit_name_prefixed, 'Listing')}}>{this.props.data.subreddit_name_prefixed}</p>
-                <p onClick={() => {this.props.switchMainPage(this.props.data.author, 'RedditProfileDisplay')}}>Posted By u/{this.props.data.author}</p>
-                <p>Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
+            <div className="media mb-3">
+                {ifThumbnail()}
+                <div className="media-body">
+                    <Link to={'/RedditPostDisplay/' + this.props.data.permalink.substring(1)}>{this.props.data.title}</Link>
+                    {ifExternalUrl()}
+                    <Link to={'/Listing/' + this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link>
+                    <p className="mb-0">Posted By <Link to={"/RedditProfileDisplay/" + this.props.data.author}>u/{this.props.data.author}</Link></p>
+                    <p className="mb-0">Created {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago</p>
+                </div>
             </div>
-        </div>
         );
     }
 }

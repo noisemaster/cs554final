@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import redditApi from './utility/redditApi';
 import SubredditQueryEntry from './SubredditQueryEntry';
+import DocumentTitle from "react-document-title";
 import Listing from './Listing';
 
 class RedditQueryList extends Component {
@@ -60,18 +61,26 @@ class RedditQueryList extends Component {
 
 	isTypeActive = type => {
 		if (this.state.type === type) {
-			return 'nav-item nav-link active';
+			return 'btn btn-primary ml-1';
 		}
-		return 'nav-item nav-link';
+		return 'btn btn-outline-primary ml-1';
     }
     
-    returnProperHTML = (entry) => {
-        if (entry.kind === 't3') {
+    returnProperHTML = () => {
+        if (this.state.queryArray.filter(entry => entry.kind === 't5').length !== 0) {
+            return (
+                <div className="card-columns">
+                    {this.state.queryArray.map(entry => {
+                        return (
+                            <SubredditQueryEntry data={entry.data} key={entry.data.id} switchMainPage={this.props.switchMainPage}/>
+                        )
+                    })}
+                </div>
+            )
+        }
+        return this.state.queryArray.map(entry => {
             return <Listing data={entry.data} key={entry.data.id} switchMainPage={this.props.switchMainPage}/>
-        }
-        if (entry.kind === 't5') {
-            return <SubredditQueryEntry data={entry.data} key={entry.data.id} switchMainPage={this.props.switchMainPage}/>
-        }
+        })
     }
 
 	getNextListingList = async () => {
@@ -96,20 +105,18 @@ class RedditQueryList extends Component {
 
 	render() {
 		return (
-			<div>
-				<div className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-					<div className="navbar-nav">
-						<a href="#" className={this.isTypeActive('Subreddits')} onClick={() => this.setType('Subreddits')}> Subreddits </a>
-						<a href="#" className={this.isTypeActive('Posts')} onClick={() => this.setType('Posts')}> Posts </a>
-					</div>
-				</div>
+			<DocumentTitle title={`Search for ${this.props.match.params['0']} ${this.state.type} - Viewit`}>
 				<main className="container">
-					{this.state.queryArray.map( (entry) => {
-						return this.returnProperHTML(entry)
-					})}
-					<div onClick={this.getNextListingList}> Get More Results </div>
+                    <div className="navbar navbar-expand-lg navbar-light justify-content-md-center">
+                        <div className="navbar-nav">
+                            <button type="button" className={this.isTypeActive('Subreddits')} onClick={() => this.setType('Subreddits')}> Subreddits </button>
+                            <button type="button" className={this.isTypeActive('Posts')} onClick={() => this.setType('Posts')}> Posts </button>
+                        </div>
+                    </div>
+                    {this.returnProperHTML()}
+					<button type="button" className="btn btn-primary" onClick={this.getNextListingList}> Get More Results </button>
 				</main>
-			</div>
+			</DocumentTitle>
 		);
 	}
 }

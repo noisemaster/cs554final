@@ -225,6 +225,35 @@ async function main() {
 		}
 	});
 
+	app.post('/register/color', async (req, res) => {
+		if (!req.cookies || !req.cookies.cs554RedditReader) {
+			res.status(401).json({error: 'No Cookie Set'});
+			return;
+		}
+
+		if (!req.body.color_choice) {
+			res.status(400).json({error: 'Invalid Color sent'});
+			return;
+		}
+		try {
+			let dbPool = await users.getDatabasePool();
+			const results = await database.getUserById(dbPool, users.TABLE_NAME, req.cookies.cs554RedditReader);
+	
+			if (!results || !results.rows || !results.rows[0]) {
+				res.status(500).json({error: 'Failed to update color choice'});
+				return
+			}
+	
+			dbPool = await users.getDatabasePool();
+			await database.updateUser(dbPool, users.TABLE_NAME, {id: req.cookies.cs554RedditReader, color_choice: req.body.color_choice});
+
+			res.sendStatus(200);
+		} catch (e) {
+			console.log(e);
+			res.status(500).json({error: 'Failed to update color choice'});
+		}
+	});
+
 	app.use('*', (req, res) => {
 		res.sendStatus(404);
 	});
