@@ -58,21 +58,21 @@ class RedditPost extends Component {
         }
         return (
             <div className="card w-100 mb-4 mt-4">
-                    <header className="card-header text-center">
-                        {this.props.profile ? 
-                            <h2><Link to={'/RedditPostDisplay/' + this.props.data.permalink}>{this.props.data.title}</Link></h2> :
-                            <h2>{this.props.data.title}</h2>
-                        }
-                        <p>
-                            Posted by <Link to={'/RedditProfileDisplay/' +  this.props.data.author}>u/{this.props.data.author}</Link> in <Link to={'/Listing/' +  this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link> with {this.props.data.score} points
-                        </p>
-                    </header>
+                <header className="card-header text-center">
+                    {this.props.profile ? 
+                        <h1><Link to={'/RedditPostDisplay/' + this.props.data.permalink}>{this.props.data.title}</Link></h1> :
+                        <h1>{this.props.data.title}</h1>
+                    }
+                    <p className="mb-0">
+                        Posted by <Link to={'/RedditProfileDisplay/' +  this.props.data.author}>u/{this.props.data.author}</Link> in <Link to={'/Listing/' +  this.props.data.subreddit_name_prefixed}>{this.props.data.subreddit_name_prefixed}</Link> with {this.props.data.score} points
+                    </p>
+                </header>
                 {ifMedia()}
                 <div className="card-body">
                     {ifExternalLink()}
                     {ifSelfText()}
                 </div>
-                <div className="card-footer text-muted">
+                <div className="card-footer">
                     Posted {helper.timeDifferenceString(new Date(this.props.data.created_utc * 1000), Date.now())} ago
                 </div>
             </div>

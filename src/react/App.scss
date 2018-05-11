@@ -1,0 +1,15 @@
+img.thumbnail {
+    width: 140px;
+}
+
+$theme-colors: (
+    "primary": #006ee5,
+);
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.navbar-dark .navbar-nav {
+    .nav-link, .navbar-text {
+        color: #a0a3a5;
+    }
+}

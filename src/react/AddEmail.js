@@ -51,6 +51,7 @@ class AddEmail extends Component {
 				<h2> Enter an Email to Register... </h2>
 				{this.displayIfEmail()}
 				<form className="form-inline my-2 my-lg-0" id="subredditSearchForm" onSubmit={this.onSubmit}>
+					<label className="sr-only" style={{color: '#898b8d'}} for="emailRegistration">Email</label>
 					<input
 						type="text"
 						value={this.state.email}
