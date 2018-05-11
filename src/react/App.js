@@ -128,8 +128,8 @@ class App extends Component {
 			);
 		}
 		return (
-			<div className="container">
-				<p>Please Log In to Continue</p>
+			<div className="container text-center mt-3">
+				<h1>Please Log In to Continue</h1>
 			</div>
 		);
 	}
